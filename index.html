@@ -77,7 +77,7 @@ body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun'
 .spinner{width:36px;height:36px;border:3px solid var(--navy-light);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .error-box{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:24px;text-align:center;color:#ff8080;}
-.chart-wrap{position:relative;height:300px;}
+.chart-wrap{position:relative;height:300px; width: 100%;}
 .map-container{height:450px; width:100%;}
 .table-scroll-y{max-height:350px; overflow-y:auto; border-bottom:1px solid var(--border);}
 .mbar-track{height:6px;background:var(--navy-light);border-radius:3px;margin-top:4px;overflow:hidden;}
@@ -193,8 +193,12 @@ table.dataTable tbody tr{background:transparent!important;}
       <div class="row g-3 mb-4">
         <div class="col-lg-8">
           <div class="sc">
-            <div class="sc-head"><div class="sc-title">📈 จำนวนกรรมการแยกตามจังหวัด</div></div>
-            <div class="sc-body"><div style="overflow-x:auto;padding-bottom:6px;"><div class="chart-wrap"><canvas id="chartProvince"></canvas></div></div></div>
+            <div class="sc-head"><div class="sc-title">📈 ภาพรวมปีที่แต่งตั้งและปีที่ครบวาระ (แนวนอน)</div></div>
+            <div class="sc-body">
+              <div class="chart-wrap">
+                <canvas id="chartTimeline"></canvas>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-lg-4">
@@ -434,17 +438,60 @@ function renderMap(pStatus) {
 }
 
 function renderCharts(data) {
-  const counts = {}; data.forEach(d=>{ counts[d.province]=(counts[d.province]||0)+1; });
-  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  if(barChartInst) barChartInst.destroy();
-  const bc = document.getElementById('chartProvince');
-  bc.style.width = Math.max((sorted.length * 26), 100) + 'px'; bc.style.minWidth = '100%';
-  barChartInst = new Chart(bc, { 
-    type:'bar', 
-    data: { labels: sorted.map(e=>e[0]), datasets: [{ data:sorted.map(e=>e[1]), backgroundColor:sorted.map(e=>e[1]>=4?'rgba(231,76,60,0.8)':e[1]===3?'rgba(243,156,18,0.8)':'rgba(201,162,39,0.8)') }] }, 
-    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#8ab4d4',font:{size:10,family:'Sarabun'}}},y:{beginAtZero:true,ticks:{color:'#8ab4d4',stepSize:1}}} } 
+  // 1. Bar Chart: Timeline (ปีแต่งตั้ง และ ปีหมดวาระ) แบบแนวนอน
+  const years = new Set();
+  const appCount = {};
+  const expCount = {};
+
+  data.forEach(d => {
+    if (d.appoint) {
+      const y = d.appoint.getFullYear() + 543;
+      years.add(y);
+      appCount[y] = (appCount[y] || 0) + 1;
+    }
+    if (d.expiry) {
+      const y = d.expiry.getFullYear() + 543;
+      years.add(y);
+      expCount[y] = (expCount[y] || 0) + 1;
+    }
   });
 
+  const sortedYears = Array.from(years).sort();
+  if (barChartInst) barChartInst.destroy();
+  const bc = document.getElementById('chartTimeline');
+  
+  barChartInst = new Chart(bc, { 
+    type: 'bar', 
+    data: { 
+      labels: sortedYears.map(y => 'ปี พ.ศ. ' + y), 
+      datasets: [
+        { label: 'ได้รับการแต่งตั้ง (คน)', data: sortedYears.map(y => appCount[y] || 0), backgroundColor: 'rgba(52, 152, 219, 0.85)' },
+        { label: 'จะครบวาระ (คน)', data: sortedYears.map(y => expCount[y] || 0), backgroundColor: 'rgba(243, 156, 18, 0.85)' }
+      ] 
+    }, 
+    options: { 
+      indexAxis: 'y', // ทำให้กราฟเป็นแนวนอน
+      responsive: true, 
+      maintainAspectRatio: false, 
+      plugins: { 
+        legend: { display: true, labels: { color: '#e2eaf4', font: { family: 'Sarabun', size: 12 } } },
+        tooltip: { titleFont: { family: 'Sarabun' }, bodyFont: { family: 'Sarabun' } }
+      }, 
+      scales: {
+        x: { 
+          beginAtZero: true, 
+          ticks: { color: '#8ab4d4', stepSize: 1, font: { family: 'Sarabun' } }, 
+          grid: { color: 'rgba(255,255,255,0.08)' } 
+        },
+        y: { 
+          ticks: { color: '#8ab4d4', font: { family: 'Sarabun' } }, 
+          grid: { display: false } 
+        }
+      } 
+    } 
+  });
+
+  // 2. Pie Chart: สัดส่วนสาขา
   const bCounts = {}; data.forEach(d=>{ const k=shortBranch(d.branch); bCounts[k]=(bCounts[k]||0)+1; });
   if(pieChartInst) pieChartInst.destroy();
   pieChartInst = new Chart(document.getElementById('chartBranchPie'), {
