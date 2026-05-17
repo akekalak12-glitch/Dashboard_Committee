@@ -109,10 +109,10 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
 <div class="topbar">
   <div>
     <div class="topbar-title">⚖️ Dashboard ศป. &mdash; ระบบติดตามกรรมการประเมินราคาทรัพย์สิน</div>
-    <div class="topbar-sub">สามารถอัปโหลดไฟล์ CSV เพื่อแสดงผล หรือดึงจาก Google Sheets</div>
+    <div class="topbar-sub">ดึงข้อมูลอัตโนมัติจาก Google Drive หรืออัปโหลดไฟล์ CSV</div>
   </div>
   <div class="d-flex align-items-center gap-3">
-    <input type="file" id="csvFileInput" accept=".csv" class="form-control form-control-sm" style="max-width: 250px; background: var(--navy-light); color: white; border: 1px solid var(--border);" title="เลือกไฟล์ CSV ของคุณ">
+    <input type="file" id="csvFileInput" accept=".csv" class="form-control form-control-sm" style="max-width: 250px; background: var(--navy-light); color: white; border: 1px solid var(--border);" title="เลือกไฟล์ CSV สำรอง">
     
     <span id="lastUpdated" style="font-size:.75rem;color:var(--text-muted);">รอโหลดข้อมูล...</span>
     <button class="btn-refresh" onclick="loadData()">🔄 รีเฟรช</button>
@@ -121,16 +121,17 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
 
 <div class="wrap">
 
-  <div id="stateLoading" class="loading-box" style="display:none;">
-    <div class="spinner"></div><span>กำลังประมวลผลข้อมูล...</span>
+  <div id="stateLoading" class="loading-box" style="display:flex;">
+    <div class="spinner"></div><span>กำลังดึงข้อมูลจาก Google Drive...</span>
   </div>
 
-  <div id="stateError" style="display:block;" class="error-box">
+  <div id="stateError" style="display:none;" class="error-box">
     <div style="font-size:2rem;margin-bottom:8px;">⚠️</div>
-    <div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;">ยังไม่มีข้อมูล หรือไม่สามารถดึงข้อมูลได้</div>
-    <div id="errMsg" style="font-size:.88rem;opacity:.85;margin-bottom:12px;">กรุณาเลือกไฟล์ province_committee.csv ที่มุมขวาบน เพื่อดูข้อมูล</div>
+    <div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;">ไม่สามารถดึงข้อมูลจากลิงก์ Google Drive ได้</div>
+    <div id="errMsg" style="font-size:.88rem;opacity:.85;margin-bottom:12px;"></div>
     <div style="font-size:.82rem;color:var(--text-secondary);line-height:1.8;">
-      หรือ หากต้องการดึงจาก Google Sheets โปรดตรวจสอบให้แน่ใจว่าไฟล์ถูกตั้งเป็นสาธารณะ (เผยแพร่ทางเว็บ) แล้ว
+      <strong>วิธีแก้:</strong> 1. เปิดไฟล์นั้นด้วย Google Sheets 2. ตั้งค่าแชร์เป็น "ทุกคนที่มีลิงก์ (Anyone with the link)" <br>
+      หรือ <strong>วิธีสำรอง:</strong> คุณสามารถกด "เลือกไฟล์" ที่มุมขวาบน เพื่ออัปโหลดไฟล์ CSV จากเครื่องได้ทันทีครับ
     </div>
   </div>
 
@@ -213,13 +214,13 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 // ─────────────────────────────────────────
-// Config
+// Config: อัปเดตใส่ ID ไฟล์ที่คุณส่งมา (1PYacF3FThSjLY3n4CagbQn9uthOSbCH8)
 // ─────────────────────────────────────────
-const SHEET_ID = '10Slv_bE4DYSq6CPw5ApaPauI3vsm9Kny';
+const SHEET_ID = '1PYacF3FThSjLY3n4CagbQn9uthOSbCH8';
+// URL ดึงข้อมูล (รองรับทั้งแบบตีพิมพ์ Publish และแบบแชร์ Share ธรรมดา)
 const URL_PUB  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=0`;
 const URL_EXP  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
-// [แก้ไข 1] ปรับวันที่ให้เป็นวันที่ปัจจุบัน ไม่ล็อคตายตัว
 const TODAY = new Date();
 TODAY.setHours(0,0,0,0); 
 
@@ -237,7 +238,6 @@ function parseThaiDate(s) {
   if (p.length !== 3) return null;
   const yr = parseInt(p[2]) - 543;
   if (isNaN(yr)) return null;
-  // [แก้ไข 2] ข้อมูลเป็น DD/MM/YYYY ต้องเอา p[1]-1 สำหรับเดือน
   return new Date(yr, parseInt(p[1]) - 1, parseInt(p[0]));
 }
 
@@ -335,7 +335,7 @@ function findDups(data) {
 }
 
 // ─────────────────────────────────────────
-// Render KPI Cards
+// Render UI
 // ─────────────────────────────────────────
 function renderKPI(data, dups) {
   const total     = data.length;
@@ -367,9 +367,6 @@ function renderKPI(data, dups) {
     </div>`).join('');
 }
 
-// ─────────────────────────────────────────
-// Render Expiry Alerts
-// ─────────────────────────────────────────
 function renderAlerts(data) {
   const items = data.filter(d=>['วิกฤต','เฝ้าระวัง','หมดวาระ'].includes(d.status))
                     .sort((a,b)=>(a.days??9999)-(b.days??9999));
@@ -400,9 +397,6 @@ function renderAlerts(data) {
   document.getElementById('alertContent').innerHTML = h;
 }
 
-// ─────────────────────────────────────────
-// Render Duplicates
-// ─────────────────────────────────────────
 function renderDups(dups) {
   const total = dups.reduce((a,d)=>a+d.members.length,0);
   document.getElementById('dupBadge').textContent = total;
@@ -431,9 +425,6 @@ function renderDups(dups) {
   document.getElementById('dupContent').innerHTML = h;
 }
 
-// ─────────────────────────────────────────
-// Province Bar Chart
-// ─────────────────────────────────────────
 function renderChart(data) {
   const counts = {};
   data.forEach(d=>{ counts[d.province]=(counts[d.province]||0)+1; });
@@ -469,9 +460,6 @@ function renderChart(data) {
   });
 }
 
-// ─────────────────────────────────────────
-// Branch Summary Table
-// ─────────────────────────────────────────
 function renderBranch(data) {
   const counts = {};
   data.forEach(d=>{ const k=shortBranch(d.branch); counts[k]=(counts[k]||0)+1; });
@@ -505,9 +493,6 @@ function renderBranch(data) {
   document.getElementById('branchTable').innerHTML = h;
 }
 
-// ─────────────────────────────────────────
-// Main DataTable
-// ─────────────────────────────────────────
 function renderMain(data) {
   const branches = [...new Set(data.map(d=>d.branch))].filter(Boolean).sort();
   document.getElementById('filterBranch').innerHTML =
@@ -538,7 +523,6 @@ function renderMain(data) {
 
   if (dtTable) { dtTable.destroy(); dtTable=null; }
 
-  // [แก้ไข 3] แก้ไข DataTables Custom Filter ให้ทำงานได้ถูกต้อง
   $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(f=>f._myFilter!==true);
   const filterFn = function(settings, data, dataIndex) {
     if (settings.nTable.id !== 'mainTable') return true;
@@ -569,9 +553,6 @@ function renderMain(data) {
 
 function applyFilters() { if(dtTable) dtTable.draw(); }
 
-// ─────────────────────────────────────────
-// Process and Display Data
-// ─────────────────────────────────────────
 function processDataText(text) {
   try {
     const rows = parseCSV(text);
@@ -603,7 +584,7 @@ function processDataText(text) {
 }
 
 // ─────────────────────────────────────────
-// Load Data (From File or Web)
+// Load Data (Fetch or Upload)
 // ─────────────────────────────────────────
 async function loadData() {
   document.getElementById('stateLoading').style.display = 'flex';
@@ -611,47 +592,51 @@ async function loadData() {
   document.getElementById('stateError').style.display  = 'none';
   document.getElementById('lastUpdated').textContent   = 'กำลังโหลด...';
 
-  // [ใหม่] ตรวจสอบว่าผู้ใช้อัปโหลดไฟล์หรือไม่
+  // ตรวจสอบว่ามีการอัปโหลดไฟล์มาด้วยตัวเองหรือไม่
   const fileInput = document.getElementById('csvFileInput');
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];
     const reader = new FileReader();
-    reader.onload = function(e) {
-      processDataText(e.target.result);
-    };
+    reader.onload = function(e) { processDataText(e.target.result); };
     reader.onerror = function() {
       document.getElementById('stateLoading').style.display = 'none';
       document.getElementById('stateError').style.display   = 'block';
-      document.getElementById('errMsg').textContent = 'ไม่สามารถอ่านไฟล์ได้';
+      document.getElementById('errMsg').textContent = 'ไม่สามารถอ่านไฟล์ที่อัปโหลดได้';
     };
     reader.readAsText(file, 'UTF-8');
     return;
   }
 
-  // หากไม่ได้เลือกไฟล์ ให้ดึงจาก Google Sheets
+  // หากไม่มีการอัปโหลดไฟล์ จะพยายามดึงข้อมูลจากลิงก์ Google Drive อัตโนมัติ
   let text = null;
-  for (const url of [URL_PUB, URL_EXP]) {
+  // ลองดึงจาก URL_EXP และ URL_PUB
+  for (const url of [URL_EXP, URL_PUB]) {
     try {
       const r = await fetch(url, {cache:'no-store'});
-      if (r.ok) { const t=await r.text(); if(!t.includes('<!DOCTYPE')) { text=t; break; } }
+      if (r.ok) { 
+        const t = await r.text(); 
+        // ถ้าผลลัพธ์เป็นหน้าเว็บ (HTML) แสดงว่าดึงผิด หรือติดการเข้าสู่ระบบ
+        if(!t.includes('<!DOCTYPE html')) { 
+          text=t; 
+          break; 
+        } 
+      }
     } catch(e) {}
   }
 
   if (!text) {
     document.getElementById('stateLoading').style.display = 'none';
     document.getElementById('stateError').style.display   = 'block';
-    document.getElementById('errMsg').textContent =
-      'ไม่สามารถเชื่อมต่อ Google Sheets ได้ กรุณาเลือกไฟล์ CSV ของคุณเอง (มุมขวาบน)';
+    document.getElementById('errMsg').innerHTML = 'การเชื่อมต่อถูกปฏิเสธ (CORS) หรือไฟล์ถูกตั้งค่าเป็นส่วนตัว';
     return;
   }
 
   processDataText(text);
 }
 
-// เพิ่ม Event Listener เพื่อให้โหลดทันทีเมื่อเลือกไฟล์
 document.getElementById('csvFileInput').addEventListener('change', loadData);
 
-// ทดลองโหลดอัตโนมัติตอนเปิดหน้า
+// ดึงข้อมูลอัตโนมัติเมื่อเปิดเว็บ
 loadData();
 </script>
 </body>
