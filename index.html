@@ -15,13 +15,30 @@
   --border: rgba(201,162,39,0.2);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun',sans-serif;min-height:100vh;}
-.topbar{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-light) 50%,var(--navy) 100%);border-bottom:2px solid var(--gold);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(201,162,39,0.25); flex-wrap: wrap; gap: 10px;}
+body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ── Topbar ── */
+.topbar{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-light) 50%,var(--navy) 100%);border-bottom:2px solid var(--gold);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(201,162,39,0.25); flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 1050;}
 .topbar-title{font-size:1.15rem;font-weight:700;color:var(--gold-light);letter-spacing:.03em;}
 .topbar-sub{font-size:.75rem;color:var(--text-secondary);margin-top:2px;}
 .btn-refresh{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 16px;border-radius:4px;cursor:pointer;font-size:.82rem;font-family:'Sarabun',sans-serif;transition:all .2s;}
 .btn-refresh:hover{background:var(--gold);color:var(--navy);}
-.wrap{padding:20px;max-width:1640px;margin:0 auto;}
+
+/* ── Layout Sidebar & Main ── */
+.sidebar{background:var(--navy);border-right:1px solid var(--border);padding:20px;width:280px;flex-shrink:0;height:calc(100vh - 65px);position:sticky;top:65px;overflow-y:auto;}
+.main-content{padding:20px;flex-grow:1;width:calc(100% - 280px);}
+@media(max-width:991px) {
+  .sidebar{width:100%;height:auto;position:relative;top:0;border-right:none;border-bottom:1px solid var(--border);}
+  .main-content{width:100%;}
+}
+
+/* ── Filters ── */
+.filter-label{font-size:.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;}
+.filter-select{background:var(--navy-light);border:1px solid var(--border);color:var(--text-primary);width:100%;padding:8px 12px;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:.85rem;margin-bottom:16px;outline:none;transition:border .2s;}
+.filter-select:focus{border-color:var(--gold);}
+.filter-select option{background:var(--navy-mid);}
+
+/* ── KPI Cards ── */
 .kpi-card{background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;padding:16px 20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;height:100%;}
 .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
 .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
@@ -32,41 +49,47 @@ body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun'
 .kpi-val{font-size:2.1rem;font-weight:700;line-height:1;margin-bottom:3px;}
 .kpi-lbl{font-size:.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;}
 .kpi-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:2.4rem;opacity:.1;}
+
+/* ── Section Cards ── */
 .sc{background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;margin-bottom:20px;overflow:hidden;height:100%; display:flex; flex-direction:column;}
 .sc-head{background:var(--navy-light);padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .sc-title{font-weight:600;font-size:.9rem;color:var(--gold-light);display:flex;align-items:center;gap:8px;}
 .sc-body{padding:16px 18px;flex:1;}
+
+/* ── Tables & Pills ── */
 .t{color:var(--text-primary);font-size:.83rem;width:100%;border-collapse:collapse;}
-.t thead th{background:var(--navy-light);color:var(--gold-light);padding:9px 11px;font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;font-size:.72rem;letter-spacing:.04em;white-space:nowrap;position:sticky;top:0;z-index:1;}
+.t thead th{background:var(--navy-light);color:var(--gold-light);padding:9px 11px;font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;font-size:.72rem;letter-spacing:.04em;white-space:nowrap;}
 .t tbody tr{border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;}
 .t tbody tr:hover{background:var(--gold-glow);}
 .t tbody td{padding:7px 11px;vertical-align:middle;}
 .tr-danger{background:rgba(231,76,60,.08)!important;}
 .tr-warning{background:rgba(243,156,18,.08)!important;}
-.tr-dup{background:rgba(231,76,60,.05)!important;}
+
 .pill{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.72rem;font-weight:600;white-space:nowrap;}
 .pill-red{background:rgba(231,76,60,.2);color:#ff7070;border:1px solid rgba(231,76,60,.4);}
 .pill-yellow{background:rgba(243,156,18,.2);color:#f1c40f;border:1px solid rgba(243,156,18,.4);}
 .pill-green{background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.3);}
 .pill-gray{background:rgba(120,120,120,.2);color:#aaa;border:1px solid rgba(120,120,120,.3);}
 .pill-blue{background:rgba(52,152,219,.2);color:#5dade2;border:1px solid rgba(52,152,219,.3);}
+
+/* ── Misc ── */
 .loading-box{display:flex;align-items:center;justify-content:center;min-height:220px;color:var(--text-secondary);}
 .spinner{width:36px;height:36px;border:3px solid var(--navy-light);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .error-box{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:24px;text-align:center;color:#ff8080;}
 .chart-wrap{position:relative;height:300px;}
+.map-container{height:450px; width:100%;}
+.table-scroll-y{max-height:350px; overflow-y:auto; border-bottom:1px solid var(--border);}
+.mbar-track{height:6px;background:var(--navy-light);border-radius:3px;margin-top:4px;overflow:hidden;}
+.mbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+
+/* DataTables Overrides */
 .dataTables_wrapper .dataTables_length label, .dataTables_wrapper .dataTables_filter label, .dataTables_wrapper .dataTables_info{color:var(--text-secondary)!important;font-size:.83rem;}
 .dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select{background:var(--navy-light)!important;border:1px solid var(--border)!important;color:var(--text-primary)!important;border-radius:4px;padding:4px 8px;}
 .dataTables_wrapper .paginate_button{color:var(--text-secondary)!important;border-radius:4px!important;}
 .dataTables_wrapper .paginate_button.current{background:var(--gold)!important;border-color:var(--gold)!important;color:var(--navy)!important;}
 .dataTables_wrapper .paginate_button:hover:not(.current){background:var(--gold-glow)!important;border-color:var(--gold)!important;color:var(--gold-light)!important;}
 table.dataTable tbody tr{background:transparent!important;}
-.ft-sel{background:var(--navy-light);border:1px solid var(--border);color:var(--text-primary);padding:4px 8px;border-radius:4px;font-size:.8rem;font-family:'Sarabun',sans-serif;cursor:pointer;}
-.mbar-track{height:6px;background:var(--navy-light);border-radius:3px;margin-top:4px;overflow:hidden;}
-.mbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
-.map-container{height:450px; width:100%;}
-.table-scroll-y{max-height:350px; overflow-y:auto; border-bottom:1px solid var(--border);}
-@media(max-width:768px){.wrap{padding:12px;}.kpi-val{font-size:1.6rem;}}
 </style>
 </head>
 <body>
@@ -74,114 +97,129 @@ table.dataTable tbody tr{background:transparent!important;}
 <div class="topbar">
   <div>
     <div class="topbar-title">⚖️ ระบบตรวจสอบคณะกรรมการผู้ทรงในคณะกรรมการประเมินราคาทรัพย์สินเพื่อประโยชน์แห่งรัฐประจำจังหวัด</div>
-    <div class="topbar-sub">ดึงข้อมูลแบบ Real-time จาก Google Sheets | ระบบประมวลผลการซ้ำซ้อนระดับสาขาและภูมิภาค</div>
+    <div class="topbar-sub">ระบบติดตามข้อมูลแบบ Real-time พร้อมแผนที่และการวิเคราะห์การซ้ำซ้อน</div>
   </div>
   <div class="d-flex align-items-center gap-3">
-    <input type="file" id="csvFileInput" accept=".csv" class="form-control form-control-sm d-none">
-    <button class="btn-refresh" onclick="document.getElementById('csvFileInput').click()" style="border-color:var(--text-secondary); color:var(--text-secondary);">📁 อัปโหลดไฟล์แทน</button>
+    <input type="file" id="csvFileInput" accept=".csv" class="d-none">
     <span id="lastUpdated" style="font-size:.75rem;color:var(--text-muted);">รอโหลดข้อมูล...</span>
-    <button class="btn-refresh" onclick="loadData()">🔄 ดึงข้อมูลใหม่</button>
+    <button class="btn-refresh" onclick="loadData()">🔄 โหลดข้อมูลใหม่</button>
   </div>
 </div>
 
-<div class="wrap">
-  <div id="stateLoading" class="loading-box" style="display:flex;"><div class="spinner"></div><span>กำลังดึงข้อมูล...</span></div>
-  <div id="stateError" style="display:none;" class="error-box"><div style="font-size:2rem;margin-bottom:8px;">⚠️</div><div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;">ดึงข้อมูลล้มเหลว</div><div id="errMsg" style="font-size:.88rem;opacity:.85;"></div></div>
+<div class="d-flex flex-column flex-lg-row">
+  
+  <div class="sidebar">
+    <h5 style="color:var(--gold-light); font-weight:700; font-size:1.1rem; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+      🔍 ตัวกรองข้อมูล
+    </h5>
 
-  <div id="stateDash" style="display:none;">
+    <div class="filter-label">📍 จังหวัด</div>
+    <select id="filterProv" class="filter-select" onchange="applyGlobalFilters()">
+      <option value="">-- ทุกจังหวัด --</option>
+    </select>
+
+    <div class="filter-label">🎓 สาขาเชี่ยวชาญ</div>
+    <select id="filterBranch" class="filter-select" onchange="applyGlobalFilters()">
+      <option value="">-- ทุกสาขา --</option>
+    </select>
+
+    <div class="filter-label">⏳ สถานะวันหมดวาระ</div>
+    <select id="filterStatus" class="filter-select" onchange="applyGlobalFilters()">
+      <option value="">-- ทุกสถานะ --</option>
+      <option value="วิกฤต">🔴 วิกฤต (น้อยกว่า 30 วัน)</option>
+      <option value="เฝ้าระวัง">🟡 เฝ้าระวัง (น้อยกว่า 90 วัน)</option>
+      <option value="ปกติ">🟢 ปกติ</option>
+      <option value="หมดวาระ">⚫ หมดวาระแล้ว</option>
+      <option value="เสนอพิจารณา">🔵 เสนอพิจารณาใหม่</option>
+    </select>
+
+    <div class="filter-label">⚠️ รูปแบบการซ้ำซ้อนในจังหวัด</div>
+    <select id="filterDup" class="filter-select" onchange="applyGlobalFilters()">
+      <option value="">-- ทุกรูปแบบ --</option>
+      <option value="0">✅ ไม่ซ้ำสาขา</option>
+      <option value="1">⚠️ ซ้ำ 2 สาขา</option>
+      <option value="2">❌ ซ้ำ 3 สาขาขึ้นไป</option>
+    </select>
+
+    <button class="btn w-100 mt-2" style="background:transparent; color:var(--text-secondary); border:1px solid var(--text-muted); font-size:0.85rem;" onclick="clearFilters()">
+      ล้างตัวกรองทั้งหมด
+    </button>
+  </div>
+
+  <div class="main-content">
     
-    <div class="row g-3 mb-3" id="kpiRow"></div>
+    <div id="stateLoading" class="loading-box"><div class="spinner"></div><span>กำลังดึงข้อมูล...</span></div>
+    <div id="stateError" style="display:none;" class="error-box"><div style="font-size:2rem;margin-bottom:8px;">⚠️</div><div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;">ดึงข้อมูลล้มเหลว</div><div id="errMsg" style="font-size:.88rem;opacity:.85;"></div></div>
 
-    <div class="sc mb-4" id="secAlerts">
-      <div class="sc-head">
-        <div class="sc-title">🔔 การแจ้งเตือนกรรมการหมดวาระและใกล้หมดวาระ <span id="alertBadge" class="badge bg-danger ms-1">0</span></div>
-        <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem;" data-bs-toggle="collapse" data-bs-target="#alertBody">▼ ย่อ/ขยาย</button>
+    <div id="stateDash" style="display:none;">
+      
+      <div class="row g-3 mb-4" id="kpiRow"></div>
+
+      <div class="sc mb-4" id="secAlerts">
+        <div class="sc-head">
+          <div class="sc-title">🔔 แจ้งเตือนกรรมการหมดวาระและใกล้หมดวาระ <span id="alertBadge" class="badge bg-danger ms-1">0</span></div>
+          <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem;" data-bs-toggle="collapse" data-bs-target="#alertBody">▼ ย่อ/ขยาย</button>
+        </div>
+        <div id="alertBody" class="collapse show"><div class="sc-body" id="alertContent"></div></div>
       </div>
-      <div id="alertBody" class="collapse show"><div class="sc-body" id="alertContent"></div></div>
-    </div>
 
-    <div class="row g-3 mb-4">
-      <div class="col-lg-6">
-        <div class="sc">
-          <div class="sc-head"><div class="sc-title">🗺️ แผนที่ประเทศไทยแสดงการซ้ำซ้อนระดับจังหวัด</div></div>
-          <div class="sc-body p-0" style="background:#0a1929;">
-             <div id="thailandMap" class="map-container"></div>
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="sc">
+            <div class="sc-head"><div class="sc-title">🗺️ แผนที่ประเทศไทยแสดงการซ้ำซ้อนระดับจังหวัด</div></div>
+            <div class="sc-body p-0" style="background:#0a1929;"><div id="thailandMap" class="map-container"></div></div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="sc">
+            <div class="sc-head"><div class="sc-title">📊 สรุปจังหวัดที่ซ้ำสาขาและไม่ซ้ำสาขา</div></div>
+            <div class="sc-body">
+               <div class="row text-center mb-3">
+                 <div class="col-4"><div class="kpi-val text-success" id="cNoDup">0</div><div class="kpi-lbl">ไม่ซ้ำสาขา</div></div>
+                 <div class="col-4"><div class="kpi-val text-warning" id="cDup2">0</div><div class="kpi-lbl">ซ้ำ 2 สาขา</div></div>
+                 <div class="col-4"><div class="kpi-val text-danger" id="cDup3">0</div><div class="kpi-lbl">ซ้ำ 3 สาขาขึ้นไป</div></div>
+               </div>
+               <div class="table-scroll-y">
+                 <table class="t">
+                   <thead><tr><th>จังหวัด</th><th>สถานะ</th><th>สาขาที่ซ้ำ (จำนวน)</th></tr></thead>
+                   <tbody id="provDupTbody"></tbody>
+                 </table>
+               </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="sc">
-          <div class="sc-head"><div class="sc-title">📊 สรุปจังหวัดที่ซ้ำสาขาและไม่ซ้ำสาขา</div></div>
-          <div class="sc-body">
-             <div class="row text-center mb-3">
-               <div class="col-4">
-                 <div class="kpi-val text-success" id="cNoDup">0</div><div class="kpi-lbl">จังหวัดที่ไม่ซ้ำสาขา</div>
-               </div>
-               <div class="col-4">
-                 <div class="kpi-val text-warning" id="cDup2">0</div><div class="kpi-lbl">จังหวัดซ้ำ 2 สาขา</div>
-               </div>
-               <div class="col-4">
-                 <div class="kpi-val text-danger" id="cDup3">0</div><div class="kpi-lbl">จังหวัดซ้ำ 3 สาขาขึ้นไป</div>
-               </div>
-             </div>
-             <div class="table-scroll-y">
-               <table class="t">
-                 <thead><tr><th>จังหวัด</th><th>สถานะ</th><th>สาขาที่ซ้ำ (จำนวน)</th></tr></thead>
-                 <tbody id="provDupTbody"></tbody>
-               </table>
-             </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-lg-8">
+          <div class="sc">
+            <div class="sc-head"><div class="sc-title">📈 จำนวนกรรมการแยกตามจังหวัด</div></div>
+            <div class="sc-body"><div style="overflow-x:auto;padding-bottom:6px;"><div class="chart-wrap"><canvas id="chartProvince"></canvas></div></div></div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="sc">
+            <div class="sc-head"><div class="sc-title">🥧 สัดส่วนแยกตามสาขาเชี่ยวชาญ</div></div>
+            <div class="sc-body"><div class="chart-wrap"><canvas id="chartBranchPie"></canvas></div></div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="row g-3 mb-4">
-      <div class="col-lg-8">
-        <div class="sc">
-          <div class="sc-head"><div class="sc-title">📈 จำนวนกรรมการแยกตามจังหวัด</div></div>
-          <div class="sc-body"><div style="overflow-x:auto;padding-bottom:6px;"><div class="chart-wrap"><canvas id="chartProvince"></canvas></div></div></div>
+      <div class="sc">
+        <div class="sc-head">
+          <div class="sc-title">📑 ตารางรายชื่อกรรมการ (อิงตามตัวกรองด้านซ้าย)</div>
+        </div>
+        <div class="sc-body">
+          <div style="overflow-x:auto;">
+            <table id="mainTable" class="t display" style="width:100%">
+              <thead><tr><th>#</th><th>จังหวัด</th><th>ชื่อ-สกุล</th><th>สาขาเชี่ยวชาญ</th><th>วันแต่งตั้ง</th><th>วันครบวาระ</th><th>คงเหลือ (วัน)</th><th>สถานะ</th></tr></thead>
+              <tbody id="mainTbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="sc">
-          <div class="sc-head"><div class="sc-title">🥧 สัดส่วนกรรมการแยกตามสาขาเชี่ยวชาญ</div></div>
-          <div class="sc-body"><div class="chart-wrap"><canvas id="chartBranchPie"></canvas></div></div>
-        </div>
-      </div>
-    </div>
 
-    <div class="sc">
-      <div class="sc-head">
-        <div class="sc-title">📑 รายชื่อกรรมการทั้งหมด</div>
-        <div class="d-flex gap-2 flex-wrap">
-          <select id="filterProv" class="ft-sel" onchange="applyFilters()"><option value="">ทุกจังหวัด</option></select>
-          <select id="filterBranch" class="ft-sel" onchange="applyFilters()"><option value="">ทุกสาขา</option></select>
-          <select id="filterStatus" class="ft-sel" onchange="applyFilters()">
-            <option value="">ทุกสถานะ</option>
-            <option value="วิกฤต">🔴 วิกฤต</option><option value="เฝ้าระวัง">🟡 เฝ้าระวัง</option>
-            <option value="ปกติ">🟢 ปกติ</option><option value="หมดวาระ">⚫ หมดวาระ</option><option value="เสนอพิจารณา">🔵 เสนอพิจารณา</option>
-          </select>
-          <select id="filterDup" class="ft-sel" onchange="applyFilters()">
-            <option value="">ทุกรูปแบบการซ้ำ (ระดับจังหวัด)</option>
-            <option value="0">✅ ไม่ซ้ำสาขา</option>
-            <option value="1">⚠️ ซ้ำ 2 สาขา</option>
-            <option value="2">❌ ซ้ำ 3 สาขาขึ้นไป</option>
-          </select>
-        </div>
-      </div>
-      <div class="sc-body">
-        <div style="overflow-x:auto;">
-          <table id="mainTable" class="t display" style="width:100%">
-            <thead><tr><th>#</th><th>จังหวัด</th><th>ชื่อ-สกุล</th><th>สาขาเชี่ยวชาญ</th><th>วันแต่งตั้ง</th><th>วันครบวาระ</th><th>คงเหลือ (วัน)</th><th>สถานะ</th></tr></thead>
-            <tbody id="mainTbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
@@ -196,18 +234,18 @@ table.dataTable tbody tr{background:transparent!important;}
 const GOOGLE_SHEETS_PUBLISH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQiJomeDXBAnZVk0rXQNotGvfDCGBcjmzxo8lfe7ARg2rCFT2YMedrN0Hs3523NoAPpicbig2PaKtII/pub?gid=700206170&single=true&output=csv';
 
 const TODAY = new Date(); TODAY.setHours(0,0,0,0); 
-let allData = [], provStatusGlobal = [], dtTable = null;
+let allData = [];
+let provStatusGlobal = []; 
+let dtTable = null;
 let barChartInst = null, pieChartInst = null;
 
 // ==========================================
-// Dictionary แผนที่ (แปลงชื่ออังกฤษจาก Highcharts เป็นภาษาไทย)
+// Dictionary แผนที่ (Eng to Thai)
 // ==========================================
-const enToThMap = {
-  'Bangkok':'กรุงเทพมหานคร','Krabi':'กระบี่','Kanchanaburi':'กาญจนบุรี','Kalasin':'กาฬสินธุ์','Kamphaeng Phet':'กำแพงเพชร','Khon Kaen':'ขอนแก่น','Chanthaburi':'จันทบุรี','Chachoengsao':'ฉะเชิงเทรา','Chon Buri':'ชลบุรี','Chai Nat':'ชัยนาท','Chaiyaphum':'ชัยภูมิ','Chumphon':'ชุมพร','Chiang Rai':'เชียงราย','Chiang Mai':'เชียงใหม่','Trang':'ตรัง','Trat':'ตราด','Tak':'ตาก','Nakhon Nayok':'นครนายก','Nakhon Pathom':'นครปฐม','Nakhon Phanom':'นครพนม','Nakhon Ratchasima':'นครราชสีมา','Nakhon Si Thammarat':'นครศรีธรรมราช','Nakhon Sawan':'นครสวรรค์','Nonthaburi':'นนทบุรี','Narathiwat':'นราธิวาส','Nan':'น่าน','Bueng Kan':'บึงกาฬ','Buri Ram':'บุรีรัมย์','Pathum Thani':'ปทุมธานี','Prachuap Khiri Khan':'ประจวบคีรีขันธ์','Prachin Buri':'ปราจีนบุรี','Pattani':'ปัตตานี','Phra Nakhon Si Ayutthaya':'พระนครศรีอยุธยา','Phangnga':'พังงา','Phatthalung':'พัทลุง','Phichit':'พิจิตร','Phitsanulok':'พิษณุโลก','Phetchaburi':'เพชรบุรี','Phetchabun':'เพชรบูรณ์','Phrae':'แพร่','Phayao':'พะเยา','Phuket':'ภูเก็ต','Maha Sarakham':'มหาสารคาม','Mukdahan':'มุกดาหาร','Mae Hong Son':'แม่ฮ่องสอน','Yala':'ยะลา','Yasothon':'ยโสธร','Roi Et':'ร้อยเอ็ด','Ranong':'ระนอง','Rayong':'ระยอง','Ratchaburi':'ราชบุรี','Lop Buri':'ลพบุรี','Lampang':'ลำปาง','Lamphun':'ลำพูน','Loei':'เลย','Si Sa Ket':'ศรีสะเกษ','Sakon Nakhon':'สกลนคร','Songkhla':'สงขลา','Satun':'สตูล','Samut Prakan':'สมุทรปราการ','Samut Songkhram':'สมุทรสงคราม','Samut Sakhon':'สมุทรสาคร','Sa Kaeo':'สระแก้ว','Saraburi':'สระบุรี','Sing Buri':'สิงห์บุรี','Sukhothai':'สุโขทัย','Suphan Buri':'สุพรรณบุรี','Surat Thani':'สุราษฎร์ธานี','Surin':'สุรินทร์','Nong Khai':'หนองคาย','Nong Bua Lam Phu':'หนองบัวลำภู','Ang Thong':'อ่างทอง','Amnat Charoen':'อำนาจเจริญ','Udon Thani':'อุดรธานี','Uttaradit':'อุตรดิตถ์','Uthai Thani':'อุทัยธานี','Ubon Ratchathani':'อุบลราชธานี'
-};
+const enToThMap = {'Bangkok':'กรุงเทพมหานคร','Krabi':'กระบี่','Kanchanaburi':'กาญจนบุรี','Kalasin':'กาฬสินธุ์','Kamphaeng Phet':'กำแพงเพชร','Khon Kaen':'ขอนแก่น','Chanthaburi':'จันทบุรี','Chachoengsao':'ฉะเชิงเทรา','Chon Buri':'ชลบุรี','Chai Nat':'ชัยนาท','Chaiyaphum':'ชัยภูมิ','Chumphon':'ชุมพร','Chiang Rai':'เชียงราย','Chiang Mai':'เชียงใหม่','Trang':'ตรัง','Trat':'ตราด','Tak':'ตาก','Nakhon Nayok':'นครนายก','Nakhon Pathom':'นครปฐม','Nakhon Phanom':'นครพนม','Nakhon Ratchasima':'นครราชสีมา','Nakhon Si Thammarat':'นครศรีธรรมราช','Nakhon Sawan':'นครสวรรค์','Nonthaburi':'นนทบุรี','Narathiwat':'นราธิวาส','Nan':'น่าน','Bueng Kan':'บึงกาฬ','Buri Ram':'บุรีรัมย์','Pathum Thani':'ปทุมธานี','Prachuap Khiri Khan':'ประจวบคีรีขันธ์','Prachin Buri':'ปราจีนบุรี','Pattani':'ปัตตานี','Phra Nakhon Si Ayutthaya':'พระนครศรีอยุธยา','Phangnga':'พังงา','Phatthalung':'พัทลุง','Phichit':'พิจิตร','Phitsanulok':'พิษณุโลก','Phetchaburi':'เพชรบุรี','Phetchabun':'เพชรบูรณ์','Phrae':'แพร่','Phayao':'พะเยา','Phuket':'ภูเก็ต','Maha Sarakham':'มหาสารคาม','Mukdahan':'มุกดาหาร','Mae Hong Son':'แม่ฮ่องสอน','Yala':'ยะลา','Yasothon':'ยโสธร','Roi Et':'ร้อยเอ็ด','Ranong':'ระนอง','Rayong':'ระยอง','Ratchaburi':'ราชบุรี','Lop Buri':'ลพบุรี','Lampang':'ลำปาง','Lamphun':'ลำพูน','Loei':'เลย','Si Sa Ket':'ศรีสะเกษ','Sakon Nakhon':'สกลนคร','Songkhla':'สงขลา','Satun':'สตูล','Samut Prakan':'สมุทรปราการ','Samut Songkhram':'สมุทรสงคราม','Samut Sakhon':'สมุทรสาคร','Sa Kaeo':'สระแก้ว','Saraburi':'สระบุรี','Sing Buri':'สิงห์บุรี','Sukhothai':'สุโขทัย','Suphan Buri':'สุพรรณบุรี','Surat Thani':'สุราษฎร์ธานี','Surin':'สุรินทร์','Nong Khai':'หนองคาย','Nong Bua Lam Phu':'หนองบัวลำภู','Ang Thong':'อ่างทอง','Amnat Charoen':'อำนาจเจริญ','Udon Thani':'อุดรธานี','Uttaradit':'อุตรดิตถ์','Uthai Thani':'อุทัยธานี','Ubon Ratchathani':'อุบลราชธานี'};
 
 // ==========================================
-// Utils
+// Utilities
 // ==========================================
 function parseThaiDate(s) {
   if(!s||s.trim()==='-'||s.trim()==='') return null;
@@ -217,10 +255,7 @@ function parseThaiDate(s) {
 }
 function fmtDate(d) { return !d?'—':`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()+543}`; }
 function daysLeft(d) { return !d?null:Math.ceil((d-TODAY)/86400000); }
-function median(arr) {
-  if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b), m=Math.floor(s.length/2);
-  return s.length%2?s[m]:(s[m-1]+s[m])/2;
-}
+function median(arr) { if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b), m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
 function shortBranch(b) {
   return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/โยธา').replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรม','สถาปัตย์/วิศวะ')
                    .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร').replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
@@ -231,7 +266,6 @@ function alertStatus(d, days) {
   if(days<0) return 'หมดวาระ'; if(days<30) return 'วิกฤต'; if(days<90) return 'เฝ้าระวัง'; return 'ปกติ';
 }
 
-// Parse CSV
 function parseCSV(text) {
   const rows=[]; let row=[], f='', q=false;
   for(let i=0;i<text.length;i++){
@@ -244,8 +278,6 @@ function parseCSV(text) {
   if(f||row.length){row.push(f.trim());if(row.some(x=>x))rows.push(row);}
   return rows;
 }
-
-// Parse Rows to Object
 function parseRows(rows) {
   const data=[];
   for(let i=1;i<rows.length;i++){
@@ -256,44 +288,92 @@ function parseRows(rows) {
   return data;
 }
 
-// ==========================================
-// Analysis: Province Duplication
-// ==========================================
 function analyzeProvinceDups(data) {
   const provs = {};
   data.forEach(d => {
     if(!provs[d.province]) provs[d.province] = {};
     provs[d.province][d.branch] = (provs[d.province][d.branch]||0)+1;
   });
-
   const res = [];
   for(const p in provs) {
     const maxDup = Math.max(...Object.values(provs[p]));
     let status = 'ไม่ซ้ำสาขา', level = 0, style='text-success';
     if(maxDup === 2) { status = 'ซ้ำ 2 สาขา'; level = 1; style='text-warning'; }
     else if(maxDup >= 3) { status = 'ซ้ำ 3 สาขาขึ้นไป'; level = 2; style='text-danger'; }
-    
     const detail = Object.entries(provs[p]).filter(([,c])=>c>1).map(([b,c])=>`<b>${shortBranch(b)}</b> (${c} ท่าน)`).join('<br>');
     res.push({ province: p, status, level, detail: detail||'-', style });
   }
   return res.sort((a,b) => b.level - a.level || a.province.localeCompare(b.province));
 }
 
+function populateDropdowns(data) {
+  const provs = [...new Set(data.map(d=>d.province))].filter(Boolean).sort();
+  $('#filterProv').html('<option value="">-- ทุกจังหวัด --</option>' + provs.map(p=>`<option value="${p}">${p}</option>`).join(''));
+  
+  const branches = [...new Set(data.map(d=>d.branch))].filter(Boolean).sort();
+  $('#filterBranch').html('<option value="">-- ทุกสาขา --</option>' + branches.map(b=>`<option value="${b}">${shortBranch(b)}</option>`).join(''));
+}
+
+function clearFilters() {
+  $('#filterProv, #filterBranch, #filterStatus, #filterDup').val('');
+  applyGlobalFilters();
+}
+
 // ==========================================
-// UI Renderers
+// Main Render Logic
 // ==========================================
+function applyGlobalFilters() {
+  const pVal = $('#filterProv').val();
+  const bVal = $('#filterBranch').val();
+  const sVal = $('#filterStatus').val();
+  const dVal = $('#filterDup').val();
+
+  let fData = allData;
+  if(pVal) fData = fData.filter(d=>d.province === pVal);
+  if(bVal) fData = fData.filter(d=>d.branch === bVal);
+  if(sVal) fData = fData.filter(d=>d.status === sVal);
+  if(dVal !== '') {
+    const targetProvs = provStatusGlobal.filter(ps=>ps.level.toString() === dVal).map(ps=>ps.province);
+    fData = fData.filter(d=>targetProvs.includes(d.province));
+  }
+
+  // หาสถานะการซ้ำซ้อนของจังหวัดเฉพาะที่มีอยู่ในข้อมูลที่ถูกกรอง (แต่ดึงค่า Level/Detail เดิมมา)
+  const presentProvs = [...new Set(fData.map(d=>d.province))];
+  const fProvStatus = provStatusGlobal.filter(ps => presentProvs.includes(ps.province));
+
+  renderKPI(fData, fProvStatus);
+  renderAlerts(fData);
+  renderProvDup(fProvStatus);
+  renderMap(fProvStatus);
+  renderCharts(fData);
+  renderTable(fData);
+}
+
 function renderKPI(data, pStatus) {
   const crit = data.filter(d=>d.status==='วิกฤต').length, warn = data.filter(d=>d.status==='เฝ้าระวัง').length;
   const validDays = data.filter(d=>d.days!==null&&d.days>=0).map(d=>d.days), med = Math.round(median(validDays));
   const c3 = pStatus.filter(p=>p.level===2).length, c2 = pStatus.filter(p=>p.level===1).length;
+  
   const cards = [
-    { v:data.length, lbl:'กรรมการทั้งหมด', icon:'👥', col:'var(--gold-light)', type:'' },
+    { v:data.length, lbl:'กรรมการที่พบ', icon:'👥', col:'var(--gold-light)', type:'' },
     { v:crit, lbl:'หมดวาระใน 30 วัน', icon:'🔴', col:'#ff6b6b', type:'danger' },
-    { v:crit+warn, lbl:'หมดวาระใน 3 เดือน (≤90)', icon:'🟡', col:'#f1c40f', type:'warning' },
-    { v:c3+c2, lbl:'จังหวัดที่มีการซ้ำซ้อน', icon:'⚠️', col:'#5dade2', type:'info' },
+    { v:crit+warn, lbl:'หมดวาระใน 3 เดือน', icon:'🟡', col:'#f1c40f', type:'warning' },
+    { v:c3+c2, lbl:'จังหวัดที่ซ้ำซ้อน', icon:'⚠️', col:'#5dade2', type:'info' },
     { v:med, lbl:'Median วันคงเหลือ', icon:'📅', col:'#58d68d', type:'success', bar:Math.round((med/Math.max(...validDays,1))*100) },
   ];
   document.getElementById('kpiRow').innerHTML = cards.map(c=>`<div class="col-6 col-md-4 col-xl"><div class="kpi-card ${c.type}"><div class="kpi-val" style="color:${c.col}">${c.v}</div><div class="kpi-lbl">${c.lbl}</div>${c.bar!=null?`<div class="mbar-track"><div class="mbar-fill" style="width:${c.bar}%"></div></div>`:''}<div class="kpi-icon">${c.icon}</div></div></div>`).join('');
+}
+
+function renderAlerts(data) {
+  const items = data.filter(d=>['วิกฤต','เฝ้าระวัง','หมดวาระ'].includes(d.status)).sort((a,b)=>(a.days??9999)-(b.days??9999));
+  document.getElementById('alertBadge').textContent = items.length;
+  if(!items.length) return document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted)">✅ ไม่มีกรรมการใกล้หมดวาระในเงื่อนไขที่เลือก</div>`;
+  let h = `<div style="overflow-x:auto;"><table class="t"><thead><tr><th>จังหวัด</th><th>ชื่อ</th><th>สาขา</th><th>วันครบวาระ</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>`;
+  items.forEach(d=>{
+    const pc=d.status==='วิกฤต'?'pill-red':d.status==='หมดวาระ'?'pill-gray':'pill-yellow';
+    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':'tr-warning'}"><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.expiry)}</td><td><strong>${d.days<0?`หมดแล้ว ${Math.abs(d.days)} วัน`:`${d.days} วัน`}</strong></td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
+  });
+  document.getElementById('alertContent').innerHTML = h+'</tbody></table></div>';
 }
 
 function renderProvDup(pStatus) {
@@ -312,18 +392,6 @@ function renderProvDup(pStatus) {
   document.getElementById('provDupTbody').innerHTML = h;
 }
 
-function renderAlerts(data) {
-  const items = data.filter(d=>['วิกฤต','เฝ้าระวัง','หมดวาระ'].includes(d.status)).sort((a,b)=>(a.days??9999)-(b.days??9999));
-  document.getElementById('alertBadge').textContent = items.length;
-  if(!items.length) return document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;">✅ ไม่มีกรรมการใกล้หมดวาระ</div>`;
-  let h = `<div style="overflow-x:auto;"><table class="t"><thead><tr><th>จังหวัด</th><th>ชื่อ</th><th>สาขา</th><th>วันครบวาระ</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>`;
-  items.forEach(d=>{
-    const pc=d.status==='วิกฤต'?'pill-red':d.status==='หมดวาระ'?'pill-gray':'pill-yellow';
-    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':'tr-warning'}"><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.expiry)}</td><td><strong>${d.days<0?`หมดแล้ว ${Math.abs(d.days)} วัน`:`${d.days} วัน`}</strong></td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
-  });
-  document.getElementById('alertContent').innerHTML = h+'</tbody></table></div>';
-}
-
 function renderMap(pStatus) {
   const mapData = Highcharts.maps['countries/th/th-all'].features.map(f => {
     const enName = f.properties.name;
@@ -334,7 +402,7 @@ function renderMap(pStatus) {
       'hc-key': f.properties['hc-key'],
       value: level,
       provName: thName,
-      statusStr: pData ? pData.status : 'ไม่มีข้อมูล',
+      statusStr: pData ? pData.status : 'ถูกกรองออก/ไม่มีข้อมูล',
       detailStr: pData&&pData.detail!=='-' ? `<br/>${pData.detail}` : ''
     };
   });
@@ -345,7 +413,7 @@ function renderMap(pStatus) {
     mapNavigation: { enabled: true, buttonOptions: { verticalAlign: 'bottom' } },
     colorAxis: {
       dataClasses: [
-        { from:-1, to:-1, color:'#163456', name:'ไม่มีข้อมูล' },
+        { from:-1, to:-1, color:'#163456', name:'ไม่อยู่ในเงื่อนไข' },
         { from:0, to:0, color:'#2ecc71', name:'ไม่ซ้ำสาขา' },
         { from:1, to:1, color:'#f39c12', name:'ซ้ำ 2 สาขา' },
         { from:2, to:2, color:'#e74c3c', name:'ซ้ำ 3 สาขาขึ้นไป' }
@@ -355,32 +423,28 @@ function renderMap(pStatus) {
       data: mapData,
       mapData: Highcharts.maps['countries/th/th-all'],
       joinBy: 'hc-key',
-      name: 'ข้อมูลความซ้ำซ้อน',
+      name: 'การซ้ำซ้อน',
       borderColor: 'rgba(255,255,255,0.1)',
       borderWidth: 0.5,
       states: { hover: { color: '#e8c445', borderColor: '#000' } },
-      tooltip: {
-        pointFormat: '<span style="font-family:Sarabun;font-size:14px"><b>{point.provName}</b><br/>สถานะ: <b>{point.statusStr}</b>{point.detailStr}</span>'
-      }
+      tooltip: { pointFormat: '<span style="font-family:Sarabun;font-size:14px"><b>{point.provName}</b><br/>สถานะ: <b>{point.statusStr}</b>{point.detailStr}</span>' }
     }],
     legend: { itemStyle: { color: '#e2eaf4', fontFamily: 'Sarabun', fontWeight:'normal' }, backgroundColor: 'transparent' }
   });
 }
 
 function renderCharts(data) {
-  // Bar Chart
   const counts = {}; data.forEach(d=>{ counts[d.province]=(counts[d.province]||0)+1; });
   const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
   if(barChartInst) barChartInst.destroy();
   const bc = document.getElementById('chartProvince');
-  bc.style.width = (sorted.length * 26) + 'px'; bc.style.minWidth = '100%';
+  bc.style.width = Math.max((sorted.length * 26), 100) + 'px'; bc.style.minWidth = '100%';
   barChartInst = new Chart(bc, { 
     type:'bar', 
     data: { labels: sorted.map(e=>e[0]), datasets: [{ data:sorted.map(e=>e[1]), backgroundColor:sorted.map(e=>e[1]>=4?'rgba(231,76,60,0.8)':e[1]===3?'rgba(243,156,18,0.8)':'rgba(201,162,39,0.8)') }] }, 
     options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#8ab4d4',font:{size:10,family:'Sarabun'}}},y:{beginAtZero:true,ticks:{color:'#8ab4d4',stepSize:1}}} } 
   });
 
-  // Pie Chart
   const bCounts = {}; data.forEach(d=>{ const k=shortBranch(d.branch); bCounts[k]=(bCounts[k]||0)+1; });
   if(pieChartInst) pieChartInst.destroy();
   pieChartInst = new Chart(document.getElementById('chartBranchPie'), {
@@ -389,26 +453,17 @@ function renderCharts(data) {
       labels: Object.keys(bCounts), 
       datasets: [{ data: Object.values(bCounts), backgroundColor: ['#e8c445','#5dade2','#58d68d','#f1c40f','#e74c3c','#9b59b6'], borderWidth: 0 }] 
     },
-    options: {
-      responsive:true, maintainAspectRatio:false, cutout: '60%',
-      plugins: { legend: { position: 'right', labels: { color: '#e2eaf4', font:{family:'Sarabun',size:11} } } }
-    }
+    options: { responsive:true, maintainAspectRatio:false, cutout: '65%', plugins: { legend: { position: 'right', labels: { color: '#e2eaf4', font:{family:'Sarabun',size:11} } } } }
   });
 }
 
-function renderMain(data, pStatus) {
-  // Populate Dropdowns
-  const provs = [...new Set(data.map(d=>d.province))].filter(Boolean).sort();
-  $('#filterProv').html('<option value="">ทุกจังหวัด</option>' + provs.map(p=>`<option value="${p}">${p}</option>`).join(''));
+function renderTable(data) {
+  if (dtTable) { dtTable.destroy(); }
   
-  const branches = [...new Set(data.map(d=>d.branch))].filter(Boolean).sort();
-  $('#filterBranch').html('<option value="">ทุกสาขา</option>' + branches.map(b=>`<option value="${b}">${shortBranch(b)}</option>`).join(''));
-
   let h = '';
   data.forEach(d=>{
-    const ps = pStatus.find(p=>p.province === d.province) || {level:0};
     const pc = {วิกฤต:'pill-red',เฝ้าระวัง:'pill-yellow',ปกติ:'pill-green',หมดวาระ:'pill-gray',เสนอพิจารณา:'pill-blue'}[d.status]||'pill-green';
-    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':d.status==='เฝ้าระวัง'?'tr-warning':''}" data-prov="${d.province}" data-branch="${d.branch}" data-status="${d.status}" data-dup="${ps.level}">
+    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':d.status==='เฝ้าระวัง'?'tr-warning':''}">
       <td>${d.no}</td><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td>
       <td class="text-center">${fmtDate(d.appoint)}</td><td class="text-center">${fmtDate(d.expiry)}</td>
       <td class="text-center">${d.days===null?'—':d.days<0?`<span style="color:#888">${d.days}</span>`:`<strong>${d.days}</strong>`}</td>
@@ -416,42 +471,30 @@ function renderMain(data, pStatus) {
     </tr>`;
   });
   document.getElementById('mainTbody').innerHTML = h;
-
-  if (dtTable) dtTable.destroy();
-  $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(f=>f._myFilter!==true);
   
-  const fFn = function(s, d, i) {
-    if(s.nTable.id!=='mainTable') return true;
-    const p=$('#filterProv').val(), b=$('#filterBranch').val(), st=$('#filterStatus').val(), dp=$('#filterDup').val();
-    const tr=$(s.aoData[i].nTr);
-    if(p && tr.data('prov')!==p) return false;
-    if(b && tr.data('branch')!==b) return false;
-    if(st && tr.data('status')!==st) return false;
-    if(dp!=='' && tr.data('dup').toString()!==dp) return false;
-    return true;
-  };
-  fFn._myFilter = true; $.fn.dataTable.ext.search.push(fFn);
-  
-  dtTable = $('#mainTable').DataTable({ pageLength: 25, language:{search:'ค้นหา:',lengthMenu:'_MENU_ รายการ',info:'_START_-_END_ จาก _TOTAL_',infoEmpty:'',zeroRecords:'ไม่พบข้อมูล',paginate:{first:'«',last:'»',next:'›',previous:'‹'}} });
+  dtTable = $('#mainTable').DataTable({ 
+    pageLength: 25, 
+    language:{search:'ค้นหาชื่อ:',lengthMenu:'แสดง _MENU_ รายการ',info:'แสดง _START_ ถึง _END_ จาก _TOTAL_ ท่าน',infoEmpty:'',zeroRecords:'ไม่พบข้อมูล',paginate:{first:'«',last:'»',next:'›',previous:'‹'}} 
+  });
 }
-function applyFilters() { if(dtTable) dtTable.draw(); }
 
 function processDataText(text) {
   try {
-    const rows = parseCSV(text); allData = parseRows(rows);
+    const rows = parseCSV(text); 
+    allData = parseRows(rows);
     if (!allData.length) throw new Error('ไม่พบข้อมูล หรือไฟล์ผิดรูปแบบ');
     
+    // คำนวณความซ้ำซ้อนจากฐานข้อมูลรวมทั้งหมดเก็บไว้เป็น Global
     provStatusGlobal = analyzeProvinceDups(allData);
     
-    renderKPI(allData, provStatusGlobal);
-    renderAlerts(allData);
-    renderProvDup(provStatusGlobal);
-    renderMap(provStatusGlobal);
-    renderCharts(allData);
-    renderMain(allData, provStatusGlobal);
+    // นำค่ามาใส่ใน Dropdown ตัวกรองครั้งแรก
+    populateDropdowns(allData);
+    
+    // เรียกใช้ฟังก์ชันประมวลผลพร้อม Filter (ครั้งแรกจะยังไม่มีการเลือกตัวกรอง)
+    applyGlobalFilters();
     
     document.getElementById('stateLoading').style.display = 'none'; document.getElementById('stateError').style.display = 'none'; document.getElementById('stateDash').style.display = 'block';
-    document.getElementById('lastUpdated').textContent = `ดึงข้อมูลสำเร็จ: ${new Date().toLocaleTimeString('th-TH')} · ${allData.length} ท่าน`;
+    document.getElementById('lastUpdated').textContent = `ข้อมูลล่าสุด: ${new Date().toLocaleTimeString('th-TH')}`;
   } catch(err) {
     document.getElementById('stateLoading').style.display = 'none'; document.getElementById('stateError').style.display = 'block'; document.getElementById('errMsg').textContent = err.message;
   }
@@ -466,16 +509,11 @@ async function loadData() {
     else throw new Error('โหลดไฟล์ไม่สำเร็จ');
   } catch (e) {
     document.getElementById('stateLoading').style.display='none'; document.getElementById('stateError').style.display='block';
-    document.getElementById('errMsg').innerHTML = 'ไม่สามารถเชื่อมต่อได้ กรุณาตรวจสอบลิงก์ Google Sheets';
+    document.getElementById('errMsg').innerHTML = 'ไม่สามารถเชื่อมต่อลิงก์ Google Sheets ได้';
   }
 }
 
-document.getElementById('csvFileInput').addEventListener('change', function(e) {
-  if (e.target.files.length > 0) {
-    const reader = new FileReader(); reader.onload = function(evt) { processDataText(evt.target.result); }; reader.readAsText(e.target.files[0], 'UTF-8');
-  }
-});
-
+// โหลดข้อมูลอัตโนมัติ
 loadData();
 </script>
 </body>
