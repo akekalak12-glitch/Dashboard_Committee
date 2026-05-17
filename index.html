@@ -181,7 +181,7 @@ table.dataTable tbody tr{background:transparent!important;}
                <div class="row text-center mb-3">
                  <div class="col-4"><div class="kpi-val text-success" id="cNoDup">0</div><div class="kpi-lbl">ไม่ซ้ำสาขา</div></div>
                  <div class="col-4"><div class="kpi-val text-warning" id="cDup2">0</div><div class="kpi-lbl">ซ้ำ 2 สาขา</div></div>
-                 <div class="col-4"><div class="kpi-val text-danger" id="cDup3">0</div><div class="kpi-lbl">ซ้ำ 3 สาขาขึ้นไป</div></div>
+                 <div class="col-4"><div class="kpi-val text-danger" id="cDup3">0</div><div class="kpi-lbl">ซ้ำ 3 สาขา</div></div>
                </div>
                <div class="table-scroll-y">
                  <table class="t">
@@ -308,7 +308,7 @@ function analyzeProvinceDups(data) {
     const maxDup = Math.max(...Object.values(provs[p]));
     let status = 'ไม่ซ้ำสาขา', level = 0, style='text-success';
     if(maxDup === 2) { status = 'ซ้ำ 2 สาขา'; level = 1; style='text-warning'; }
-    else if(maxDup >= 3) { status = 'ซ้ำ 3 สาขาขึ้นไป'; level = 2; style='text-danger'; }
+    else if(maxDup >= 3) { status = 'ซ้ำ 3 สาขา'; level = 2; style='text-danger'; }
     const detail = Object.entries(provs[p]).filter(([,c])=>c>1).map(([b,c])=>`<b>${shortBranch(b)}</b> (${c} ท่าน)`).join('<br>');
     res.push({ province: p, status, level, detail: detail||'-', style });
   }
