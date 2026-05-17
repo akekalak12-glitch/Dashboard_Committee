@@ -64,9 +64,8 @@ body{background:var(--bg-body); color:var(--text-main); font-family:'Sarabun',sa
 .map-container{height:500px; width:100%; background: #ffffff; border-radius: 20px;}
 .table-scroll-y{max-height:400px; overflow-y:auto; padding-right: 5px;}
 
-/* ── Loading / Error ── */
-.loading-box{display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--text-main);flex-direction:column;gap:15px;}
-.spinner{width:45px;height:45px;border:4px solid var(--border);border-top-color:var(--info);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
+.loading-box{display:flex;align-items:center;justify-content:center;min-height:220px;color:var(--text-main);}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--info);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .error-box{background:#fee2e2; border:1px solid #fca5a5; border-radius:15px; padding:30px; text-align:center; color:#ef4444; margin:20px;}
 
@@ -90,9 +89,8 @@ body{background:var(--bg-body); color:var(--text-main); font-family:'Sarabun',sa
   </div>
   <div class="d-flex align-items-center gap-3">
     <input type="file" id="csvFileInput" accept=".csv" class="d-none">
-    <button class="btn btn-sm" onclick="document.getElementById('csvFileInput').click()" style="background:#f8fafc; color:#1e293b; font-weight:bold; border:none;">📁 อัปโหลดไฟล์แทน</button>
     <span id="lastUpdated" style="font-size:.8rem; color:#fff; font-weight:600;"></span>
-    <button class="btn btn-sm btn-light fw-bold" onclick="loadData()" style="color:#2563eb">🔄 รีเฟรช</button>
+    <button class="btn btn-sm btn-light fw-bold" onclick="loadData()" style="color:#2563eb">🔄 รีเฟรชข้อมูล</button>
   </div>
 </div>
 
@@ -125,18 +123,8 @@ body{background:var(--bg-body); color:var(--text-main); font-family:'Sarabun',sa
 
   <div class="main-content">
     
-    <div id="stateLoading" class="loading-box">
-      <div class="spinner"></div>
-      <div style="font-weight:700; font-size:1.2rem;">กำลังรวบรวมข้อมูลให้คุณครู่เดียว...</div>
-      <small style="color:#64748b;">(หากหมุนนานเกิน 10 วินาที อาจโดนบล็อกอินเทอร์เน็ต)</small>
-    </div>
-    
-    <div id="stateError" style="display:none;" class="error-box">
-      <div style="font-size:3rem;">🚧</div>
-      <div style="font-size:1.2rem;font-weight:700;">โอ๊ะ! โหลดข้อมูลไม่สำเร็จ</div>
-      <div id="errMsg" style="font-size:.95rem; opacity:.9; margin-top:10px; margin-bottom:15px;"></div>
-      <button class="btn btn-danger" onclick="document.getElementById('csvFileInput').click()">ใช้วิธี "อัปโหลดไฟล์แทน"</button>
-    </div>
+    <div id="stateLoading" class="loading-box"><div class="spinner"></div><span>กำลังรวบรวมข้อมูลให้คุณครู่เดียว...</span></div>
+    <div id="stateError" style="display:none;" class="error-box"><div style="font-size:3rem;">🚧</div><div style="font-size:1.2rem;font-weight:700;">ดึงข้อมูลล้มเหลว</div><div id="errMsg" style="font-size:.9rem;opacity:.8;margin-top:10px;"></div></div>
 
     <div id="stateDash" style="display:none;">
       
@@ -278,11 +266,10 @@ function applyGlobalFilters() {
     const presentProvs = [...new Set(fData.map(d=>d.province))];
     const fProvStatus = provStatusGlobal.filter(ps => presentProvs.includes(ps.province));
     
-    // โหลดชิ้นส่วนต่างๆ แยกกัน เพื่อป้องกันการพังแบบลูกโซ่
     try { renderKPI(fData); } catch(e) { console.warn("KPI Error", e); }
     try { renderAlerts(fData); } catch(e) { console.warn("Alerts Error", e); }
     try { renderProvDup(fProvStatus); } catch(e) { console.warn("Dup Table Error", e); }
-    try { renderMap(fProvStatus); } catch(e) { console.warn("Map Error", e); document.getElementById('thailandMap').innerHTML='<div class="text-center mt-5 text-muted">โหลดแผนที่ไม่สำเร็จ ข้ามส่วนนี้ไปก่อน</div>'; }
+    try { renderMap(fProvStatus); } catch(e) { console.warn("Map Error", e); document.getElementById('thailandMap').innerHTML='<div class="text-center mt-5 text-danger">โหลดแผนที่ไม่สำเร็จ</div>'; }
     try { renderCharts(fData); } catch(e) { console.warn("Charts Error", e); }
     try { renderTable(fData); } catch(e) { console.warn("Table Error", e); }
   } catch(e) { console.error("Filter Execution Error", e); }
@@ -342,8 +329,7 @@ function renderProvDup(pStatus) {
 }
 
 function renderMap(pStatus) {
-  // ตรวจสอบว่าระบบ Highcharts โหลดสำเร็จหรือไม่ เพื่อไม่ให้ล่ม
-  if(typeof Highcharts === 'undefined' || !Highcharts.maps || !Highcharts.maps['countries/th/th-all']) return;
+  if(!Highcharts.maps || !Highcharts.maps['countries/th/th-all']) return;
   
   const mapData = Highcharts.maps['countries/th/th-all'].features.map(f => {
     const thName = enToThMap[f.properties.name] || f.properties.name;
@@ -373,8 +359,6 @@ function renderMap(pStatus) {
 }
 
 function renderCharts(data) {
-  if(typeof Chart === 'undefined') return;
-
   const years = new Set();
   const appC = {}, expC = {};
   data.forEach(d => {
@@ -405,27 +389,24 @@ function renderCharts(data) {
 }
 
 function renderTable(data) {
-  if(typeof $ === 'undefined' || !$.fn.dataTable) return;
-
   if (dtTable) dtTable.destroy();
   let h = '';
   data.forEach(d=>{
     const pc = { 'หมดวาระภายใน 1 ปี':'pill-yellow', 'ปกติ':'pill-green', 'หมดวาระแล้ว':'pill-gray', 'เสนอพิจารณา':'pill-blue' }[d.status]||'pill-green';
-    h += `<tr><td>${d.no}</td><td><b>${d.province}</b></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.appoint)}</td><td>${fmtDate(d.expiry)}</td><td class="text-center">${d.days!==null&&d.days<0?`<span class="text-danger fw-bold">${Math.abs(d.days)} (เกิน)</span>`:d.days===null?'-':d.days}</td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
+    h += `<tr><td>${d.no}</td><td><b>${d.province}</b></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.appoint)}</td><td>${fmtDate(d.expiry)}</td><td class="text-center">${d.days!==null&&d.days<0?`<span class="text-danger fw-bold">${Math.abs(d.days)} (เกินกำหนด)</span>`:d.days===null?'-':d.days}</td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
   });
   document.getElementById('mainTbody').innerHTML = h;
   dtTable = $('#mainTable').DataTable({ pageLength: 10, language:{search:'ค้นหา:', lengthMenu:'_MENU_ รายการ', info:'_START_ - _END_ จาก _TOTAL_ ท่าน', paginate:{next:'›', previous:'‹'}} });
 }
 
 function populateDropdowns(data) {
-  if(typeof $ === 'undefined') return;
   const provs = [...new Set(data.map(d=>d.province))].filter(Boolean).sort();
   $('#filterProv').html('<option value="">-- ทุกจังหวัด --</option>'+provs.map(p=>`<option value="${p}">${p}</option>`).join(''));
   const branches = [...new Set(data.map(d=>d.branch))].filter(Boolean).sort();
   $('#filterBranch').html('<option value="">-- ทุกสาขา --</option>'+branches.map(b=>`<option value="${b}">${shortBranch(b)}</option>`).join(''));
 }
 
-function clearFilters() { if(typeof $ === 'undefined') return; $('#filterProv, #filterBranch, #filterStatus, #filterDup').val(''); applyGlobalFilters(); }
+function clearFilters() { $('#filterProv, #filterBranch, #filterStatus, #filterDup').val(''); applyGlobalFilters(); }
 
 function parseCSV(text) {
   const rows=[]; let row=[], f='', q=false;
@@ -454,20 +435,18 @@ function processDataText(text) {
   try {
     const rows = parseCSV(text); 
     allData = parseRows(rows);
-    if(allData.length === 0) throw new Error("ไฟล์ว่างเปล่า หรือรูปแบบตารางไม่ถูกต้อง");
-    
+    if(allData.length === 0) throw new Error("ไม่พบข้อมูลในไฟล์");
     provStatusGlobal = analyzeProvinceDups(allData);
     populateDropdowns(allData);
     applyGlobalFilters();
-    
     document.getElementById('stateLoading').style.display='none'; 
     document.getElementById('stateDash').style.display='block';
-    document.getElementById('lastUpdated').textContent = 'เชื่อมต่อล่าสุด: '+new Date().toLocaleTimeString();
+    document.getElementById('lastUpdated').textContent = 'ข้อมูล ณ เวลา: '+new Date().toLocaleTimeString();
   } catch(e){ 
     console.error(e);
     document.getElementById('stateLoading').style.display='none'; 
     document.getElementById('stateError').style.display='block'; 
-    document.getElementById('errMsg').innerHTML = 'มีปัญหาในการประมวลผลข้อมูล<br>' + e.message; 
+    document.getElementById('errMsg').textContent = e.message; 
   }
 }
 
@@ -475,9 +454,29 @@ async function loadData() {
   document.getElementById('stateLoading').style.display='flex';
   document.getElementById('stateDash').style.display='none';
   document.getElementById('stateError').style.display='none';
+  try {
+    const res = await fetch(GOOGLE_SHEETS_PUBLISH_URL, { cache: 'no-store' });
+    if(!res.ok) throw new Error("Fetch failed");
+    const text = await res.text(); 
+    processDataText(text);
+  } catch (e) { 
+    console.error(e);
+    document.getElementById('stateLoading').style.display='none'; 
+    document.getElementById('stateError').style.display='block'; 
+    document.getElementById('errMsg').innerHTML = 'การเชื่อมต่อถูกขัดจังหวะ โปรดลองรีเฟรชอีกครั้ง';
+  }
+}
 
-  // ตรวจสอบว่าระบบโหลดไลบรารีครบไหมก่อนทำงาน
-  if(typeof $ === 'undefined' || typeof Chart === 'undefined') {
-    document.getElementById('stateLoading').style.display='none';
-    document.getElementById('stateError').style.display='block';
-    document.getElementById('errMsg').innerHTML = 'ดาวน์โหลดส่วนประกอบแผนที่และกราฟไม่สำเร็จ
+// อัปโหลดไฟล์แทน
+document.getElementById('csvFileInput').addEventListener('change', function(e) {
+  if (e.target.files.length > 0) {
+    const reader = new FileReader(); 
+    reader.onload = function(evt) { processDataText(evt.target.result); }; 
+    reader.readAsText(e.target.files[0], 'UTF-8');
+  }
+});
+
+loadData();
+</script>
+</body>
+</html>
