@@ -67,6 +67,7 @@ body {background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun
 
 .pill {display:inline-block;padding:2px 9px;border-radius:10px;font-size:.72rem;font-weight:600;white-space:nowrap;}
 .pill-red {background:rgba(231,76,60,.2);color:#ff7070;border:1px solid rgba(231,76,60,.4);}
+.pill-orange {background:rgba(230,126,34,.2);color:#f39c12;border:1px solid rgba(230,126,34,.4);}
 .pill-yellow {background:rgba(243,156,18,.2);color:#f1c40f;border:1px solid rgba(243,156,18,.4);}
 .pill-green {background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.3);}
 .pill-gray {background:rgba(120,120,120,.2);color:#aaa;border:1px solid rgba(120,120,120,.3);}
@@ -82,7 +83,7 @@ body {background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun
 .table-scroll-y {max-height:350px; overflow-y:auto; border-bottom:1px solid var(--border);}
 
 /* DataTables Overrides */
-.dataTables_wrapper .dataTables_length label, .dataTables_wrapper .dataTables_filter label, .dataTables_wrapper .dataTables_info{color:var(--text-secondary)!important;font-size Rama:.83rem;}
+.dataTables_wrapper .dataTables_length label, .dataTables_wrapper .dataTables_filter label, .dataTables_wrapper .dataTables_info{color:var(--text-secondary)!important;font-size:.83rem;}
 .dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select{background:var(--navy-light)!important;border:1px solid var(--border)!important;color:var(--text-primary)!important;border-radius:4px;padding:4px 8px;}
 .dataTables_wrapper .paginate_button{color:var(--text-secondary)!important;border-radius:4px!important;}
 .dataTables_wrapper .paginate_button.current{background:var(--gold)!important;border-color:var(--gold)!important;color:var(--navy)!important;}
@@ -127,10 +128,11 @@ table.dataTable tbody tr{background:transparent!important;}
     <div class="filter-label">⏳ สถานะวันหมดวาระ</div>
     <select id="filterStatus" class="filter-select" onchange="applyGlobalFilters()">
       <option value="">-- ทุกสถานะ --</option>
-      <option value="หมดวาระแล้ว">⚫ หมดวาระแล้ว</option>
-      <option value="ภายใน 1 ปี">🟡 ภายใน 1 ปี</option>
-      <option value="ภายใน 2 ปี">🟠 ภายใน 2 ปี</option>
-      <option value="ภายใน 3 ปี">🔴 ภายใน 3 ปี</option>
+      <option value="expired">⚫ หมดวาระแล้ว</option>
+      <option value="1year">🔴 ภายใน 1 ปี</option>
+      <option value="2years">🟠 ภายใน 2 ปี</option>
+      <option value="3years">🟡 ภายใน 3 ปี</option>
+      <option value="normal">🟢 ปกติ (เกิน 3 ปี)</option>
     </select>
 
     <div class="filter-label">⚠️ รูปแบบการซ้ำซ้อนในจังหวัด</div>
@@ -167,7 +169,9 @@ table.dataTable tbody tr{background:transparent!important;}
         <div class="col-lg-6">
           <div class="sc">
             <div class="sc-head"><div class="sc-title">🗺️ แผนที่ประเทศไทยแสดงการซ้ำซ้อนระดับจังหวัด</div></div>
-            <div class="sc-body p-0" style="background:#0a1929;"><div id="thailandMap" class="map-container"></div></div>
+            <div class="sc-body p-0" style="background:#0a1929;">
+              <div id="thailandMap" class="map-container"></div>
+            </div>
           </div>
         </div>
         <div class="col-lg-6">
@@ -211,7 +215,7 @@ table.dataTable tbody tr{background:transparent!important;}
 
       <div class="sc">
         <div class="sc-head">
-          <div class="sc-title">📑 ตารางรายชื่อกรรมการ (อิงตามตัวกรองด้านซ้าย)</div>
+          <div class="sc-title">📑 ตารางรายชื่อกรรมการทั้งหมด (อิงตามตัวกรองด้านซ้าย)</div>
         </div>
         <div class="sc-body">
           <div style="overflow-x:auto;">
@@ -231,9 +235,9 @@ table.dataTable tbody tr{background:transparent!important;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 <script src="https://code.highcharts.com/mapdata/countries/th/th-all.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
 <script>
 const GOOGLE_SHEETS_PUBLISH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQiJomeDXBAnZVk0rXQNotGvfDCGBcjmzxo8lfe7ARg2rCFT2YMedrN0Hs3523NoAPpicbig2PaKtII/pub?gid=700206170&single=true&output=csv';
@@ -254,15 +258,17 @@ function parseThaiDate(s) {
 }
 function fmtDate(d) { return !d?'—':`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()+543}`; }
 function daysLeft(d) { return !d?null:Math.ceil((d-TODAY)/86400000); }
-function median(arr) { if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b), m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
 function shortBranch(b) {
   return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/โยธา')
                    .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร').replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
                    .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
 }
+
+// ลอจิกการให้สถานะแต่ละคน เพื่อนำไปแสดงในตาราง
 function alertStatus(d, days) {
-  if(!d) return 'เสนอพิจารณา'; if(days===null) return '—';
-  if(days<0) return 'หมดวาระแล้ว'; 
+  if(!d) return 'เสนอพิจารณา'; 
+  if(days===null) return '—';
+  if(days<0) return 'หมดวาระแล้ว';
   if(days<=365) return 'ภายใน 1 ปี';
   if(days<=730) return 'ภายใน 2 ปี';
   if(days<=1095) return 'ภายใน 3 ปี';
@@ -281,6 +287,7 @@ function parseCSV(text) {
   if(f||row.length){row.push(f.trim());if(row.some(x=>x))rows.push(row);}
   return rows;
 }
+
 function parseRows(rows) {
   const data=[];
   for(let i=1;i<rows.length;i++){
@@ -323,9 +330,6 @@ function clearFilters() {
   applyGlobalFilters();
 }
 
-// ==========================================
-// Main Render Logic
-// ==========================================
 function applyGlobalFilters() {
   try {
     const pVal = $('#filterProv').val();
@@ -339,15 +343,13 @@ function applyGlobalFilters() {
     if(pSearchVal) fData = fData.filter(d=>d.province.includes(pSearchVal));
     if(bVal) fData = fData.filter(d=>d.branch === bVal);
     
-    // [แก้ไข] ลอจิกการกรองตามเงื่อนไขใหม่ 1 ปี, 2 ปี, 3 ปี
-    if(sVal === 'หมดวาระแล้ว') {
-      fData = fData.filter(d=>d.days !== null && d.days < 0);
-    } else if(sVal === 'ภายใน 1 ปี') {
-      fData = fData.filter(d=>d.days !== null && d.days >= 0 && d.days <= 365);
-    } else if(sVal === 'ภายใน 2 ปี') {
-      fData = fData.filter(d=>d.days !== null && d.days >= 0 && d.days <= 730);
-    } else if(sVal === 'ภายใน 3 ปี') {
-      fData = fData.filter(d=>d.days !== null && d.days >= 0 && d.days <= 1095);
+    // ตรรกะตัวกรอง 1, 2, 3 ปี ตามที่ผู้ใช้คลิกเลือก
+    if(sVal) {
+      if(sVal === 'expired') fData = fData.filter(d => d.days !== null && d.days < 0);
+      else if(sVal === '1year') fData = fData.filter(d => d.days !== null && d.days >= 0 && d.days <= 365);
+      else if(sVal === '2years') fData = fData.filter(d => d.days !== null && d.days >= 0 && d.days <= 730);
+      else if(sVal === '3years') fData = fData.filter(d => d.days !== null && d.days >= 0 && d.days <= 1095);
+      else if(sVal === 'normal') fData = fData.filter(d => d.days !== null && d.days > 1095);
     }
 
     if(dVal !== '') {
@@ -358,16 +360,17 @@ function applyGlobalFilters() {
     const presentProvs = [...new Set(fData.map(d=>d.province))];
     const fProvStatus = provStatusGlobal.filter(ps => presentProvs.includes(ps.province));
 
-    try { renderKPI(fData, fProvStatus); } catch(e) {}
-    try { renderAlerts(fData); } catch(e) {}
-    try { renderProvDup(fProvStatus); } catch(e) {}
-    try { renderMap(fProvStatus); } catch(e) {}
-    try { renderCharts(fData); } catch(e) {}
-    try { renderTable(fData); } catch(e) {}
+    renderKPI(fData);
+    renderAlerts(fData);
+    renderProvDup(fProvStatus);
+    renderMap(fProvStatus);
+    renderCharts(fData);
+    renderTable(fData);
   } catch(e) { console.error(e); }
 }
 
-function renderKPI(data, pStatus) {
+function renderKPI(data) {
+  // คำนวณ KPI ใหม่ตามสั่ง
   const allProvs = [...new Set(allData.map(d => d.province))];
   const noAssetProvs = allProvs.filter(p => {
     const pItems = allData.filter(d => d.province === p);
@@ -378,24 +381,26 @@ function renderKPI(data, pStatus) {
   const minDays = activeDays.length > 0 ? Math.min(...activeDays) : 0;
   const in1Yr = data.filter(d => d.days !== null && d.days >= 0 && d.days <= 365).length;
 
-  // ปรับเหลือ 4 ใบถ้วนขนาดสมมาตรพอดี
   const cards = [
     { v:data.length, lbl:'กรรมการที่พบ', icon:'👥', col:'var(--gold-light)', type:'' },
-    { v:in1Yr, lbl:'หมดวาระภายใน 1 ปี', icon:'...🟡', col:'#f1c40f', type:'warning' },
+    { v:in1Yr, lbl:'หมดวาระภายใน 1 ปี', icon:'🟡', col:'#f1c40f', type:'warning' },
     { v:noAssetProvs, lbl:'จังหวัดที่ไม่มี สาขาประเมินราคา/อสังหาฯ', icon:'⚠️', col:'#5dade2', type:'info' },
     { v:minDays, lbl:'วันของกรรมการที่ใกล้หมดวาระที่น้อยที่สุด', icon:'⏳', col:'#58d68d', type:'success' },
   ];
   document.getElementById('kpiRow').innerHTML = cards.map(c=>`<div class="col-6 col-md-3"><div class="kpi-card ${c.type}"><div class="kpi-val" style="color:${c.col}">${c.v.toLocaleString()}</div><div class="kpi-lbl">${c.lbl}</div><div class="kpi-icon">${c.icon}</div></div></div>`).join('');
 }
 
-// [แก้ไข] ให้แสดงเฉพาะผู้ที่มีวาระคงเหลือภายใน 1 ปี (และผู้ที่หมดวาระแล้ว) ตามสั่ง
 function renderAlerts(data) {
-  const items = data.filter(d=>d.days !== null && d.days <= 365).sort((a,b)=>(a.days??9999)-(b.days??9999));
+  // แจ้งเตือนแสดงเฉพาะ "หมดวาระแล้ว" และ "หมดวาระภายใน 1 ปี"
+  const items = data.filter(d => d.days !== null && d.days <= 365).sort((a,b)=>(a.days??9999)-(b.days??9999));
   document.getElementById('alertBadge').textContent = items.length;
-  if(!items.length) return document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary)">✅ ไม่มีกรรมการใกล้หมดวาระภายใน 1 ปีในเงื่อนไขที่เลือก</div>`;
+  if(!items.length) {
+    document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary)">✅ ไม่มีกรรมการใกล้หมดวาระภายใน 1 ปีในเงื่อนไขที่เลือก</div>`;
+    return;
+  }
   
   const provs = [...new Set(items.map(i=>i.province))].sort();
-  let h = `<div class="mb-3 p-3 rounded" style="background:rgba(243,156,18,0.1); border:1px solid rgba(243,156,18,0.3); font-size:0.85rem;"><span class="text-warning fw-bold">📍 จังหวัดที่ใกล้หมดวาระภายใน 1 ปี:</span><div class="mt-1">${provs.join(' • ')}</div></div>`;
+  let h = `<div class="mb-3 p-3 rounded" style="background:rgba(243,156,18,0.1); border:1px dashed rgba(243,156,18,0.3); font-size:0.85rem;"><span class="text-warning fw-bold">📍 จังหวัดที่ใกล้หมดวาระภายใน 1 ปี:</span><div class="mt-1" style="color:var(--text-primary);">${provs.join(' • ')}</div></div>`;
   
   h += `<div style="overflow-x:auto;"><table class="t w-100"><thead><tr><th>จังหวัด</th><th>ชื่อ</th><th>สาขา</th><th>วันครบวาระ</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>`;
   items.forEach(d=>{
@@ -425,14 +430,11 @@ function renderProvDup(pStatus) {
 function renderMap(pStatus) {
   if(typeof Highcharts === 'undefined' || !Highcharts.maps || !Highcharts.maps['countries/th/th-all']) return;
   const mapData = Highcharts.maps['countries/th/th-all'].features.map(f => {
-    const enName = f.properties.name;
-    const thName = enToThMap[enName] || enName;
+    const thName = enToThMap[f.properties.name] || f.properties.name;
     const pData = pStatus.find(p => p.province === thName);
-    const level = pData ? pData.level : -1;
     return {
-      'hc-key': f.properties['hc-key'], value: level, provName: thName,
-      statusStr: pData ? pData.status : 'ถูกกรองออก/ไม่มีข้อมูล',
-      detailStr: pData&&pData.detail!=='--' ? `<br/>${pData.detail}` : ''
+      'hc-key': f.properties['hc-key'], value: pData ? pData.level : -1, provName: thName,
+      statusStr: pData ? pData.status : 'ถูกกรองออก/ไม่มีข้อมูล', detailStr: pData&&pData.detail!=='--' ? `<br/>${pData.detail}` : ''
     };
   });
 
@@ -442,15 +444,15 @@ function renderMap(pStatus) {
     mapNavigation: { enabled: true, buttonOptions: { verticalAlign: 'bottom' } },
     colorAxis: {
       dataClasses: [
-        { from:-1, to:-1, color:'#163456', name:'ไม่อยู่ในเงื่อนไข' },
-        { from:0, to:0, color:'#2ecc71', name:'ไม่ซ้ำสาขา' },
-        { from:1, to:1, color:'#f39c12', name:'ซ้ำ 2 สาขา' },
-        { from:2, to:2, color:'#e74c3c', name:'ซ้ำ 3 สาขาขึ้นไป' }
+        { from:-1, to:-1, color:'#1e293b', name:'ไม่อยู่ในเงื่อนไข' }, // สีเทาเข้ม
+        { from:0, to:0, color:'#22c55e', name:'ไม่ซ้ำสาขา' },       // สีเขียวสด
+        { from:1, to:1, color:'#f59e0b', name:'ซ้ำ 2 สาขา' },       // สีส้ม
+        { from:2, to:2, color:'#ef4444', name:'ซ้ำ 3 สาขาขึ้นไป' }    // สีแดง
       ]
     },
     series: [{
       data: mapData, joinBy: 'hc-key', name: 'การซ้ำซ้อน', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 0.5,
-      states: { hover: { color: '#e8c445', borderColor: '#000' } },
+      states: { hover: { color: '#3b82f6', borderColor: '#ffffff' } },
       tooltip: { pointFormat: '<span style="font-family:Sarabun;font-size:14px"><b>{point.provName}</b><br/>สถานะ: <b>{point.statusStr}</b>{point.detailStr}</span>' }
     }],
     legend: { itemStyle: { color: '#e2eaf4', fontFamily: 'Sarabun', fontWeight:'normal' }, backgroundColor: 'transparent' },
@@ -473,8 +475,8 @@ function renderCharts(data) {
     data: { 
       labels: sortedYears.map(y => 'ปี พ.ศ. ' + y), 
       datasets: [
-        { label: 'ได้รับการแต่งตั้ง (คน)', data: sortedYears.map(y => appCount[y] || 0), backgroundColor: 'rgba(52, 152, 219, 0.85)' },
-        { label: 'จะครบวาระ (คน)', data: sortedYears.map(y => expCount[y] || 0), backgroundColor: 'rgba(243, 156, 18, 0.85)' }
+        { label: 'ได้รับการแต่งตั้ง (คน)', data: sortedYears.map(y => appCount[y] || 0), backgroundColor: '#3b82f6', borderRadius:4 },
+        { label: 'จะครบวาระ (คน)', data: sortedYears.map(y => expCount[y] || 0), backgroundColor: '#f59e0b', borderRadius:4 }
       ] 
     }, 
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#e2eaf4', font: { family: 'Sarabun' } } } }, scales: { x: { ticks: { color: '#8ab4d4' }, grid: { color: 'rgba(255,255,255,0.08)' } }, y: { ticks: { color: '#8ab4d4' }, grid: { display: false } } } } 
@@ -484,7 +486,11 @@ function renderCharts(data) {
   if(pieChartInst) pieChartInst.destroy();
   pieChartInst = new Chart(document.getElementById('chartBranchPie'), {
     type: 'doughnut',
-    data: { labels: Object.keys(bCounts), datasets: [{ data: Object.values(bCounts), backgroundColor: ['#e8c445','#5dade2','#58d68d','#f1c40f','#e74c3c','#9b59b6'], borderWidth: 0 }] },
+    data: { 
+      labels: Object.keys(bCounts), 
+      // สีสว่าง ตัดกันชัดเจนสำหรับ Dark Theme
+      datasets: [{ data: Object.values(bCounts), backgroundColor: ['#ef4444','#f97316','#f59e0b','#84cc16','#10b981','#06b6d4','#3b82f6','#8b5cf6','#d946ef'], borderWidth: 0 }] 
+    },
     options: { responsive:true, maintainAspectRatio:false, cutout: '65%', plugins: { legend: { position: 'right', labels: { color: '#e2eaf4', font:{family:'Sarabun',size:11} } } } }
   });
 }
@@ -494,8 +500,16 @@ function renderTable(data) {
   if (dtTable) { dtTable.destroy(); }
   let h = '';
   data.forEach(d=>{
-    const pc = d.days<0?'pill-gray':d.days<=365?'pill-yellow':d.days<=730?'pill-blue':'pill-green';
-    h += `<tr class="${d.days<0?'tr-danger':d.days<=365?'tr-warning':''}">
+    const pc = {
+      'หมดวาระแล้ว':'pill-gray',
+      'ภายใน 1 ปี':'pill-red',
+      'ภายใน 2 ปี':'pill-orange',
+      'ภายใน 3 ปี':'pill-yellow',
+      'ปกติ':'pill-green',
+      'เสนอพิจารณา':'pill-blue'
+    }[d.status]||'pill-green';
+
+    h += `<tr class="${d.days<0?'tr-danger':(d.days>=0 && d.days<=365)?'tr-warning':''}">
       <td>${d.no}</td><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td>
       <td class="text-center">${fmtDate(d.appoint)}</td><td class="text-center">${fmtDate(d.expiry)}</td>
       <td class="text-center">${d.days===null?'—':d.days<0?`<span style="color:#ff6b6b">${d.days}</span>`:`<strong>${d.days}</strong>`}</td>
@@ -503,15 +517,20 @@ function renderTable(data) {
     </tr>`;
   });
   document.getElementById('mainTbody').innerHTML = h;
+  
   dtTable = $('#mainTable').DataTable({ pageLength: 25, language:{search:'ค้นหาชื่อ:',lengthMenu:'แสดง _MENU_ รายการ',info:'แสดง _START_ ถึง _END_ จาก _TOTAL_ ท่าน',paginate:{next:'›',previous:'‹'}} });
 }
 
 function processDataText(text) {
   try {
-    const rows = parseCSV(text); allData = parseRows(rows);
+    const rows = parseCSV(text); 
+    allData = parseRows(rows);
+    if (!allData.length) throw new Error('ไม่พบข้อมูล หรือไฟล์ผิดรูปแบบ');
+    
     provStatusGlobal = analyzeProvinceDups(allData);
     populateDropdowns(allData);
     applyGlobalFilters();
+    
     document.getElementById('stateLoading').style.display = 'none'; document.getElementById('stateError').style.display = 'none'; document.getElementById('stateDash').style.display = 'block';
     document.getElementById('lastUpdated').textContent = `ข้อมูลล่าสุด: ${new Date().toLocaleTimeString('th-TH')}`;
   } catch(err) {
@@ -520,6 +539,8 @@ function processDataText(text) {
 }
 
 async function loadData() {
+  document.getElementById('stateLoading').style.display = 'flex';
+  document.getElementById('stateDash').style.display = 'none'; document.getElementById('stateError').style.display = 'none';
   try {
     const res = await fetch(GOOGLE_SHEETS_PUBLISH_URL, { cache: 'no-store' });
     if(res.ok) { const text = await res.text(); processDataText(text); } 
