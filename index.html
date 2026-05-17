@@ -39,7 +39,7 @@ body {background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun
 /* ── KPI Cards ── */
 .kpi-card {background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;padding:16px 20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;height:100%;}
 .kpi-card:hover {transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.kpi-card::before {content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+.kpi-card::before {content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--gold),var(--gold-light));}
 .kpi-card.danger::before {background:linear-gradient(90deg,#e74c3c,#ff6b6b);}
 .kpi-card.warning::before {background:linear-gradient(90deg,#f39c12,#f1c40f);}
 .kpi-card.info::before {background:linear-gradient(90deg,#3498db,#5dade2);}
@@ -56,7 +56,7 @@ body {background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun
 
 /* ── Tables & Pills ── */
 .t {color:var(--text-primary);font-size:.83rem;width:100%;border-collapse:collapse;}
-.t thead th {background:var(--navy-light);color:var(--gold-light);padding:9px 11px;font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;font-size Rama:.72rem;letter-spacing:.04em;white-space:nowrap;}
+.t thead th {background:var(--navy-light);color:var(--gold-light);padding:9px 11px;font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;font-size:.72rem;letter-spacing:.04em;white-space:nowrap;}
 .t tbody tr {border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;}
 .t tbody tr:hover {background:var(--gold-glow);}
 .t tbody td {padding:7px 11px;vertical-align:middle;}
@@ -109,7 +109,10 @@ table.dataTable tbody tr{background:transparent!important;}
       🔍 ตัวกรองข้อมูล
     </h5>
 
-    <div class="filter-label">📍 จังหวัด</div>
+    <div class="filter-label">⌨️ พิมพ์ค้นหาชื่อจังหวัด</div>
+    <input type="text" id="searchProvInput" class="filter-select" placeholder="พิมพ์ชื่อจังหวัดที่นี่..." oninput="applyGlobalFilters()" style="color:#ffffff;">
+
+    <div class="filter-label">📍 หรือเลือกจากรายการจังหวัด</div>
     <select id="filterProv" class="filter-select" onchange="applyGlobalFilters()">
       <option value="">-- ทุกจังหวัด --</option>
     </select>
@@ -252,7 +255,7 @@ function fmtDate(d) { return !d?'—':`${String(d.getDate()).padStart(2,'0')}/${
 function daysLeft(d) { return !d?null:Math.ceil((d-TODAY)/86400000); }
 function median(arr) { if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b), m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
 function shortBranch(b) {
-  return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/โยธา')
+  return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวรรคมโยธา','สถาปัตย์/โยธา')
                    .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร').replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
                    .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
 }
@@ -311,20 +314,23 @@ function populateDropdowns(data) {
 
 function clearFilters() {
   $('#filterProv, #filterBranch, #filterStatus, #filterDup').val('');
+  $('#searchProvInput').val(''); // ล้างช่องค้นหาตัวหนังสือ
   applyGlobalFilters();
 }
 
 // ==========================================
-// Main Render Logic
+// Main Filter Logic (ปรับแก้ระบบค้นหาพิมพ์ชื่อเพิ่มเข้ามา)
 // ==========================================
 function applyGlobalFilters() {
   const pVal = $('#filterProv').val();
   const bVal = $('#filterBranch').val();
   const sVal = $('#filterStatus').val();
   const dVal = $('#filterDup').val();
+  const pSearchVal = $('#searchProvInput').val().trim(); // [ใหม่] ค่าคำพิมพ์ค้นหาจังหวัด
 
   let fData = allData;
   if(pVal) fData = fData.filter(d=>d.province === pVal);
+  if(pSearchVal) fData = fData.filter(d=>d.province.includes(pSearchVal)); // [ใหม่] ดักกรองตัวหนังสือพิมพ์ค้นหา
   if(bVal) fData = fData.filter(d=>d.branch === bVal);
   if(sVal) fData = fData.filter(d=>d.status === sVal);
   if(dVal !== '') {
@@ -343,9 +349,9 @@ function applyGlobalFilters() {
   renderTable(fData);
 }
 
-// ⚠️ แก้ไขลอจิกและคำแสดงผลบน KPI Card ตามสั่ง
+// ⚠️ [แก้ไข] ปรับลดและเปลี่ยนหน้าตา KPI ตามเงื่อนไขสั่ง
 function renderKPI(data, pStatus) {
-  const crit = data.filter(d=>d.status==='วิกฤต').length, warn = data.filter(d=>d.status==='เฝ้าระวัง').length;
+  const warn = data.filter(d=>d.status==='เฝ้าระวัง').length;
   
   // 1. ลอจิกหาจังหวัดที่ไม่มี สาขาประเมินราคา/อสังหาริมทรัพย์เลย
   const allProvs = [...new Set(allData.map(d => d.province))];
@@ -358,14 +364,17 @@ function renderKPI(data, pStatus) {
   const activeDays = data.filter(d => d.days !== null && d.days >= 0).map(d => d.days);
   const minDays = activeDays.length > 0 ? Math.min(...activeDays) : 0;
 
+  // 3. [ใหม่] ลอจิกหาจำนวนกรรมการที่หมดวาระภายใน 1 ปี (days ระหว่าง 0 ถึง 365 วัน)
+  const in1Yr = data.filter(d => d.days !== null && d.days >= 0 && d.days <= 365).length;
+
+  // [ปรับใหม่] เหลือ 4 ใบถ้วน ลบใบ 30 วันออก และเปลี่ยนใบ 3 เดือนเป็น 1 ปี
   const cards = [
     { v:data.length, lbl:'กรรมการที่พบ', icon:'👥', col:'var(--gold-light)', type:'' },
-    { v:crit, lbl:'หมดวาระใน 30 วัน', icon:'🔴', col:'#ff6b6b', type:'danger' },
-    { v:crit+warn, lbl:'หมดวาระใน 3 เดือน', icon:'🟡', col:'#f1c40f', type:'warning' },
+    { v:in1Yr, lbl:'หมดวาระภายใน 1 ปี', icon:'🟡', col:'#f1c40f', type:'warning' },
     { v:noAssetProvs, lbl:'จังหวัดที่ไม่มี สาขาประเมินราคา/อสังหาฯ', icon:'⚠️', col:'#5dade2', type:'info' },
     { v:minDays, lbl:'วันของกรรมการที่ใกล้หมดวาระที่น้อยที่สุด', icon:'⏳', col:'#58d68d', type:'success' },
   ];
-  document.getElementById('kpiRow').innerHTML = cards.map(c=>`<div class="col-6 col-md-4 col-xl"><div class="kpi-card ${c.type}"><div class="kpi-val" style="color:${c.col}">${c.v.toLocaleString()}</div><div class="kpi-lbl">${c.lbl}</div><div class="kpi-icon">${c.icon}</div></div></div>`).join('');
+  document.getElementById('kpiRow').innerHTML = cards.map(c=>`<div class="col-6 col-md-3"><div class="kpi-card ${c.type}"><div class="kpi-val" style="color:${c.col}">${c.v.toLocaleString()}</div><div class="kpi-lbl">${c.lbl}</div><div class="kpi-icon">${c.icon}</div></div></div>`).join('');
 }
 
 function renderAlerts(data) {
