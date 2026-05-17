@@ -16,21 +16,17 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg-body); color:var(--text-main); font-family:'Sarabun',sans-serif; min-height:100vh; overflow-x:hidden;}
 
-/* ── Topbar ── */
 .topbar{background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border-bottom:3px solid var(--gold); padding:15px 24px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1050;}
 .topbar-title{font-size:1.2rem; font-weight:700; color:#ffffff; letter-spacing:.02em;}
 .topbar-sub{font-size:.75rem; color:rgba(255,255,255,0.8); margin-top:2px;}
 
-/* ── Sidebar ── */
 .sidebar{background:var(--sidebar-bg); padding:25px; width:300px; flex-shrink:0; height:calc(100vh - 75px); position:sticky; top:75px; overflow-y:auto; color:#fff;}
 .filter-label{font-size:.85rem; color:#cbd5e1; margin-bottom:8px; font-weight:600; margin-top:15px;}
 .filter-select{background:#334155; border:1px solid #475569; color:#f8fafc; width:100%; padding:10px 12px; border-radius:8px; font-size:.9rem; outline:none; transition:all 0.3s;}
 .filter-select:focus{border-color:var(--info); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);}
 
-/* ── Content ── */
 .main-content{padding:25px; flex-grow:1; width:calc(100% - 300px);}
 
-/* ── KPI Cards ── */
 .kpi-card{background:var(--card-bg); border-radius:15px; padding:20px; position:relative; overflow:hidden; transition:all 0.3s; height:100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border);}
 .kpi-card:hover{transform:translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05);}
 .kpi-card::after{content:''; position:absolute; left:0; bottom:0; height:5px; width:100%;}
@@ -41,13 +37,11 @@ body{background:var(--bg-body); color:var(--text-main); font-family:'Sarabun',sa
 .kpi-lbl{font-size:.8rem; color:#64748b; font-weight:700; text-transform:uppercase;}
 .kpi-icon{position:absolute; right:15px; top:20px; font-size:2.5rem; opacity:.15;}
 
-/* ── Section UI ── */
 .sc{background:var(--card-bg); border-radius:15px; margin-bottom:25px; overflow:hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);}
 .sc-head{background:#f8fafc; padding:15px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between;}
 .sc-title{font-weight:700; font-size:1rem; color:#1e293b; display:flex; align-items:center; gap:10px;}
 .sc-body{padding:20px;}
 
-/* ── Cute Table & Pills ── */
 .t{width:100%; border-collapse:separate; border-spacing: 0 8px;}
 .t thead th{background:none; color:#64748b; padding:10px 15px; font-weight:700; font-size:.75rem; text-transform:uppercase; border:none;}
 .t tbody tr{background:#fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition:all 0.2s;}
@@ -222,7 +216,7 @@ function parseThaiDate(s) {
 function fmtDate(d) { return !d?'—':`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()+543}`; }
 function daysLeft(d) { return !d?null:Math.ceil((d-TODAY)/86400000); }
 function shortBranch(b) {
-  return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/โยธา')
+  return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/โยธา').replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรม','สถาปัตย์/วิศวะ')
                    .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร').replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
                    .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
 }
@@ -266,6 +260,7 @@ function applyGlobalFilters() {
     const presentProvs = [...new Set(fData.map(d=>d.province))];
     const fProvStatus = provStatusGlobal.filter(ps => presentProvs.includes(ps.province));
     
+    // Safety Catch for each component
     try { renderKPI(fData); } catch(e) { console.warn("KPI Error", e); }
     try { renderAlerts(fData); } catch(e) { console.warn("Alerts Error", e); }
     try { renderProvDup(fProvStatus); } catch(e) { console.warn("Dup Table Error", e); }
