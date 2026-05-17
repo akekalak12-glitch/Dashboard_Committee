@@ -46,6 +46,7 @@ body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun'
 .kpi-card.warning::before{background:linear-gradient(90deg,#f39c12,#f1c40f);}
 .kpi-card.info::before{background:linear-gradient(90deg,#3498db,#5dade2);}
 .kpi-card.success::before{background:linear-gradient(90deg,#2ecc71,#58d68d);}
+.kpi-card.gray::before{background:linear-gradient(90deg,#95a5a6,#7f8c8d);}
 .kpi-val{font-size:2.1rem;font-weight:700;line-height:1;margin-bottom:3px;}
 .kpi-lbl{font-size:.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;}
 .kpi-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:2.4rem;opacity:.1;}
@@ -126,10 +127,9 @@ table.dataTable tbody tr{background:transparent!important;}
     <div class="filter-label">⏳ สถานะวันหมดวาระ</div>
     <select id="filterStatus" class="filter-select" onchange="applyGlobalFilters()">
       <option value="">-- ทุกสถานะ --</option>
-      <option value="วิกฤต">🔴 วิกฤต (น้อยกว่า 30 วัน)</option>
-      <option value="เฝ้าระวัง">🟡 เฝ้าระวัง (น้อยกว่า 90 วัน)</option>
-      <option value="ปกติ">🟢 ปกติ</option>
-      <option value="หมดวาระ">⚫ หมดวาระแล้ว</option>
+      <option value="หมดวาระแล้ว">⚫ หมดวาระแล้ว (เลยกำหนด)</option>
+      <option value="หมดวาระภายใน 1 ปี">🟡 หมดวาระภายใน 1 ปี</option>
+      <option value="ปกติ">🟢 ปกติ (มากกว่า 1 ปี)</option>
       <option value="เสนอพิจารณา">🔵 เสนอพิจารณาใหม่</option>
     </select>
 
@@ -155,10 +155,10 @@ table.dataTable tbody tr{background:transparent!important;}
       
       <div class="row g-3 mb-4" id="kpiRow"></div>
 
-      <div class="sc mb-4" id="secAlerts">
-        <div class="sc-head">
-          <div class="sc-title">🔔 แจ้งเตือนกรรมการหมดวาระและใกล้หมดวาระ <span id="alertBadge" class="badge bg-danger ms-1">0</span></div>
-          <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem;" data-bs-toggle="collapse" data-bs-target="#alertBody">▼ ย่อ/ขยาย</button>
+      <div class="sc mb-4" id="secAlerts" style="border-color: rgba(243, 156, 18, 0.4);">
+        <div class="sc-head" style="background: rgba(243, 156, 18, 0.1);">
+          <div class="sc-title text-warning">🔔 การแจ้งเตือนกรรมการหมดวาระและใกล้หมดวาระ (ภายใน 1 ปี) <span id="alertBadge" class="badge bg-danger ms-2">0</span></div>
+          <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem; border-color:var(--text-secondary); color:var(--text-secondary)" data-bs-toggle="collapse" data-bs-target="#alertBody">▼ ย่อ/ขยาย</button>
         </div>
         <div id="alertBody" class="collapse show"><div class="sc-body" id="alertContent"></div></div>
       </div>
@@ -211,7 +211,7 @@ table.dataTable tbody tr{background:transparent!important;}
 
       <div class="sc">
         <div class="sc-head">
-          <div class="sc-title">📑 ตารางรายชื่อกรรมการ (อิงตามตัวกรองด้านซ้าย)</div>
+          <div class="sc-title">📑 ตารางรายชื่อกรรมการทั้งหมด (อิงตามตัวกรองด้านซ้าย)</div>
         </div>
         <div class="sc-body">
           <div style="overflow-x:auto;">
@@ -265,9 +265,14 @@ function shortBranch(b) {
                    .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร').replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
                    .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
 }
+
+// ⚠️ ปรับเงื่อนไขการแจ้งเตือน: เน้นเฉพาะ 1 ปี (365 วัน)
 function alertStatus(d, days) {
-  if(!d) return 'เสนอพิจารณา'; if(days===null) return '—';
-  if(days<0) return 'หมดวาระ'; if(days<30) return 'วิกฤต'; if(days<90) return 'เฝ้าระวัง'; return 'ปกติ';
+  if(!d) return 'เสนอพิจารณา'; 
+  if(days===null) return '—';
+  if(days<0) return 'หมดวาระแล้ว'; 
+  if(days<=365) return 'หมดวาระภายใน 1 ปี'; 
+  return 'ปกติ';
 }
 
 function parseCSV(text) {
@@ -341,7 +346,7 @@ function applyGlobalFilters() {
     fData = fData.filter(d=>targetProvs.includes(d.province));
   }
 
-  // หาสถานะการซ้ำซ้อนของจังหวัดเฉพาะที่มีอยู่ในข้อมูลที่ถูกกรอง (แต่ดึงค่า Level/Detail เดิมมา)
+  // หาสถานะการซ้ำซ้อนของจังหวัดเฉพาะที่มีอยู่ในข้อมูลที่ถูกกรอง 
   const presentProvs = [...new Set(fData.map(d=>d.province))];
   const fProvStatus = provStatusGlobal.filter(ps => presentProvs.includes(ps.province));
 
@@ -354,14 +359,15 @@ function applyGlobalFilters() {
 }
 
 function renderKPI(data, pStatus) {
-  const crit = data.filter(d=>d.status==='วิกฤต').length, warn = data.filter(d=>d.status==='เฝ้าระวัง').length;
+  const expired = data.filter(d=>d.status==='หมดวาระแล้ว').length;
+  const within1Yr = data.filter(d=>d.status==='หมดวาระภายใน 1 ปี').length;
   const validDays = data.filter(d=>d.days!==null&&d.days>=0).map(d=>d.days), med = Math.round(median(validDays));
   const c3 = pStatus.filter(p=>p.level===2).length, c2 = pStatus.filter(p=>p.level===1).length;
   
   const cards = [
     { v:data.length, lbl:'กรรมการที่พบ', icon:'👥', col:'var(--gold-light)', type:'' },
-    { v:crit, lbl:'หมดวาระใน 30 วัน', icon:'🔴', col:'#ff6b6b', type:'danger' },
-    { v:crit+warn, lbl:'หมดวาระใน 3 เดือน', icon:'🟡', col:'#f1c40f', type:'warning' },
+    { v:expired, lbl:'หมดวาระแล้ว', icon:'⚫', col:'#aaa', type:'gray' },
+    { v:within1Yr, lbl:'หมดวาระภายใน 1 ปี', icon:'🟡', col:'#f1c40f', type:'warning' },
     { v:c3+c2, lbl:'จังหวัดที่ซ้ำซ้อน', icon:'⚠️', col:'#5dade2', type:'info' },
     { v:med, lbl:'Median วันคงเหลือ', icon:'📅', col:'#58d68d', type:'success', bar:Math.round((med/Math.max(...validDays,1))*100) },
   ];
@@ -369,15 +375,35 @@ function renderKPI(data, pStatus) {
 }
 
 function renderAlerts(data) {
-  const items = data.filter(d=>['วิกฤต','เฝ้าระวัง','หมดวาระ'].includes(d.status)).sort((a,b)=>(a.days??9999)-(b.days??9999));
+  // ดึงข้อมูลเฉพาะคนที่หมดวาระแล้ว หรือ จะหมดภายใน 1 ปี
+  const items = data.filter(d=>['หมดวาระแล้ว','หมดวาระภายใน 1 ปี'].includes(d.status)).sort((a,b)=>(a.days??9999)-(b.days??9999));
   document.getElementById('alertBadge').textContent = items.length;
-  if(!items.length) return document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted)">✅ ไม่มีกรรมการใกล้หมดวาระในเงื่อนไขที่เลือก</div>`;
+  
+  if(!items.length) {
+    document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted)">✅ ไม่มีกรรมการที่หมดวาระหรือใกล้หมดวาระภายใน 1 ปี ในเงื่อนไขที่เลือก</div>`;
+    return;
+  }
+  
+  // สร้างสรุปรายชื่อจังหวัดที่ได้รับผลกระทบ
+  const affectedProvs = [...new Set(items.map(i=>i.province))].sort();
+  let summaryHtml = `
+    <div style="background:rgba(243, 156, 18, 0.08); border: 1px dashed rgba(243, 156, 18, 0.4); padding:12px 16px; border-radius:6px; margin-bottom:15px;">
+      <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;">
+        <span style="font-size:1.1rem">📍</span> <strong>จังหวัดที่ได้รับผลกระทบทั้งหมด (${affectedProvs.length} จังหวัด):</strong>
+      </div>
+      <div style="font-size:0.85rem; color:var(--gold-light); line-height:1.6;">
+        ${affectedProvs.join(' • ')}
+      </div>
+    </div>
+  `;
+
   let h = `<div style="overflow-x:auto;"><table class="t"><thead><tr><th>จังหวัด</th><th>ชื่อ</th><th>สาขา</th><th>วันครบวาระ</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>`;
   items.forEach(d=>{
-    const pc=d.status==='วิกฤต'?'pill-red':d.status==='หมดวาระ'?'pill-gray':'pill-yellow';
-    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':'tr-warning'}"><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.expiry)}</td><td><strong>${d.days<0?`หมดแล้ว ${Math.abs(d.days)} วัน`:`${d.days} วัน`}</strong></td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
+    const pc = d.status==='หมดวาระแล้ว'?'pill-gray':'pill-yellow';
+    const trClass = d.status==='หมดวาระแล้ว'?'tr-danger':'tr-warning';
+    h += `<tr class="${trClass}"><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.expiry)}</td><td><strong>${d.days<0?`เลยกำหนด ${Math.abs(d.days)} วัน`:`${d.days} วัน`}</strong></td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
   });
-  document.getElementById('alertContent').innerHTML = h+'</tbody></table></div>';
+  document.getElementById('alertContent').innerHTML = summaryHtml + h + '</tbody></table></div>';
 }
 
 function renderProvDup(pStatus) {
@@ -470,7 +496,7 @@ function renderCharts(data) {
       ] 
     }, 
     options: { 
-      indexAxis: 'y', // ทำให้กราฟเป็นแนวนอน
+      indexAxis: 'y', // แนวนอน
       responsive: true, 
       maintainAspectRatio: false, 
       plugins: { 
@@ -509,8 +535,16 @@ function renderTable(data) {
   
   let h = '';
   data.forEach(d=>{
-    const pc = {วิกฤต:'pill-red',เฝ้าระวัง:'pill-yellow',ปกติ:'pill-green',หมดวาระ:'pill-gray',เสนอพิจารณา:'pill-blue'}[d.status]||'pill-green';
-    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':d.status==='เฝ้าระวัง'?'tr-warning':''}">
+    const pc = {
+      'หมดวาระภายใน 1 ปี': 'pill-yellow', 
+      'ปกติ': 'pill-green', 
+      'หมดวาระแล้ว': 'pill-gray', 
+      'เสนอพิจารณา': 'pill-blue'
+    }[d.status] || 'pill-green';
+
+    const trClass = d.status === 'หมดวาระแล้ว' ? 'tr-danger' : d.status === 'หมดวาระภายใน 1 ปี' ? 'tr-warning' : '';
+
+    h += `<tr class="${trClass}">
       <td>${d.no}</td><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td>
       <td class="text-center">${fmtDate(d.appoint)}</td><td class="text-center">${fmtDate(d.expiry)}</td>
       <td class="text-center">${d.days===null?'—':d.days<0?`<span style="color:#888">${d.days}</span>`:`<strong>${d.days}</strong>`}</td>
