@@ -106,7 +106,6 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
 </head>
 <body>
 
-<!-- Topbar -->
 <div class="topbar">
   <div>
     <div class="topbar-title">⚖️ Dashboard ศป. &mdash; ระบบติดตามกรรมการประเมินราคาทรัพย์สิน</div>
@@ -120,12 +119,10 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
 
 <div class="wrap">
 
-  <!-- Loading -->
   <div id="stateLoading" class="loading-box">
     <div class="spinner"></div><span>กำลังดึงข้อมูลจาก Google Sheets...</span>
   </div>
 
-  <!-- Error -->
   <div id="stateError" style="display:none;" class="error-box">
     <div style="font-size:2rem;margin-bottom:8px;">⚠️</div>
     <div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;">ไม่สามารถดึงข้อมูลได้</div>
@@ -136,13 +133,10 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
     </div>
   </div>
 
-  <!-- Dashboard -->
   <div id="stateDash" style="display:none;">
 
-    <!-- KPI Row -->
     <div class="row g-3 mb-4" id="kpiRow"></div>
 
-    <!-- Expiry Alerts -->
     <div class="sc" id="secAlerts">
       <div class="sc-head">
         <div class="sc-title">🔔 การแจ้งเตือนวันหมดวาระ <span id="alertBadge" class="badge bg-danger ms-1">0</span></div>
@@ -153,7 +147,6 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
       </div>
     </div>
 
-    <!-- Duplicates -->
     <div class="sc" id="secDup">
       <div class="sc-head">
         <div class="sc-title">🔍 รายการที่ต้องตรวจสอบ — สาขาซ้ำในจังหวัด <span id="dupBadge" class="badge bg-warning text-dark ms-1">0</span></div>
@@ -164,7 +157,6 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
       </div>
     </div>
 
-    <!-- Charts Row -->
     <div class="row g-3 mb-4">
       <div class="col-lg-8">
         <div class="sc h-100">
@@ -182,7 +174,6 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
       </div>
     </div>
 
-    <!-- Main Table -->
     <div class="sc">
       <div class="sc-head">
         <div class="sc-title">📑 รายชื่อกรรมการทั้งหมด</div>
@@ -214,10 +205,7 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
       </div>
     </div>
 
-  </div><!-- /stateDash -->
-</div><!-- /wrap -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
@@ -229,7 +217,10 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
 const SHEET_ID = '10Slv_bE4DYSq6CPw5ApaPauI3vsm9Kny';
 const URL_PUB  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=0`;
 const URL_EXP  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
-const TODAY    = new Date(2026, 4, 17); // May 17 2026
+
+// [แก้ไข] เปลี่ยนจากวันที่ล็อคตายตัว เป็นดึงจากระบบปัจจุบันและเซ็ตเป็น 00:00 น.
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0); 
 
 let allData = [];
 let dtTable = null;
@@ -245,7 +236,9 @@ function parseThaiDate(s) {
   if (p.length !== 3) return null;
   const yr = parseInt(p[2]) - 543;
   if (isNaN(yr)) return null;
-  return new Date(yr, parseInt(p[0]) - 1, parseInt(p[1]));
+  // [แก้ไข] ข้อมูลเป็นรูปแบบ DD/MM/YYYY ของไทย
+  // วันคือ p[0], เดือนคือ p[1] ต้องเอา p[1]-1 เข้าพารามิเตอร์ของ Date
+  return new Date(yr, parseInt(p[1]) - 1, parseInt(p[0]));
 }
 
 function fmtDate(d) {
@@ -548,13 +541,16 @@ function renderMain(data) {
 
   if (dtTable) { dtTable.destroy(); dtTable=null; }
 
-  // Custom filter
+  // [แก้ไข] Custom filter แก้ไขให้รับ parameters ได้ถูกต้องและเข้าถึง index แถว
   $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(f=>f._myFilter!==true);
-  const filterFn = function(settings) {
+  const filterFn = function(settings, data, dataIndex) {
     if (settings.nTable.id !== 'mainTable') return true;
     const branch = document.getElementById('filterBranch').value;
     const status = document.getElementById('filterStatus').value;
-    const tr = $(settings.aoData[settings.aoData.length-1]?.nTr);
+    
+    // ดึง row ที่ถูกต้องจาก dataIndex
+    const tr = $(settings.aoData[dataIndex].nTr);
+    
     if (!tr.length) return true;
     if (branch && tr.data('branch')!==branch) return false;
     if (status && tr.data('status')!==status) return false;
