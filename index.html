@@ -130,8 +130,8 @@ table.dataTable tbody tr{background:transparent!important;}
       <option value="">-- ทุกสถานะ --</option>
       <option value="expired">⚫ หมดวาระแล้ว</option>
       <option value="1year">🔴 ภายใน 1 ปี</option>
-      <option value="2years">🟠 1 - 2 ปี</option>
-      <option value="3years">🟡 2 - 3 ปี</option>
+      <option value="2years">🟠 ภายใน 2 ปี (1-2 ปี)</option>
+      <option value="3years">🟡 ภายใน 3 ปี (2-3 ปี)</option>
       <option value="normal">🟢 ปกติ (เกิน 3 ปี)</option>
     </select>
 
@@ -247,6 +247,7 @@ let allData = [];
 let provStatusGlobal = []; 
 let dtTable = null;
 let barChartInst = null, pieChartInst = null;
+let mapRendered = false; // ตัวเช็คว่าเคยวาดแผนที่หรือยัง
 
 const enToThMap = {'Bangkok':'กรุงเทพมหานคร','Krabi':'กระบี่','Kanchanaburi':'กาญจนบุรี','Kalasin':'กาฬสินธุ์','Kamphaeng Phet':'กำแพงเพชร','Khon Kaen':'ขอนแก่น','Chanthaburi':'จันทบุรี','Chachoengsao':'ฉะเชิงเทรา','Chon Buri':'ชลบุรี','Chai Nat':'ชัยนาท','Chaiyaphum':'ชัยภูมิ','Chumphon':'ชุมพร','Chiang Rai':'เชียงราย','Chiang Mai':'เชียงใหม่','Trang':'ตรัง','Trat':'ตราด','Tak':'ตาก','Nakhon Nayok':'นครนายก','Nakhon Pathom':'นครปฐม','Nakhon Phanom':'นครพนม','Nakhon Ratchasima':'นครราชสีมา','Nakhon Si Thammarat':'นครศรีธรรมราช','Nakhon Sawan':'นครสวรรค์','Nonthaburi':'นนทบุรี','Narathiwat':'นราธิวาส','Nan':'น่าน','Bueng Kan':'บึงกาฬ','Buri Ram':'บุรีรัมย์','Pathum Thani':'ปทุมธานี','Prachuap Khiri Khan':'ประจวบคีรีขันธ์','Prachin Buri':'ปราจีนบุรี','Pattani':'ปัตตานี','Phra Nakhon Si Ayutthaya':'พระนครศรีอยุธยา','Phangnga':'พังงา','Phatthalung':'พัทลุง','Phichit':'พิจิตร','Phitsanulok':'พิษณุโลก','Phetchaburi':'เพชรบุรี','Phetchabun':'เพชรบูรณ์','Phrae':'แพร่','Phayao':'พะเยา','Phuket':'ภูเก็ต','Maha Sarakham':'มหาสารคาม','Mukdahan':'มุกดาหาร','Mae Hong Son':'แม่ฮ่องสอน','Yala':'ยะลา','Yasothon':'ยโสธร','Roi Et':'ร้อยเอ็ด','Ranong':'ระนอง','Rayong':'ระยอง','Ratchaburi':'ราชบุรี','Lop Buri':'ลพบุรี','Lampang':'ลำปาง','Lamphun':'ลำพูน','Loei':'เลย','Si Sa Ket':'ศรีสะเกษ','Sakon Nakhon':'สกลนคร','Songkhla':'สงขลา','Satun':'สตูล','Samut Prakan':'สมุทรปราการ','Samut Songkhram':'สมุทรสงคราม','Samut Sakhon':'สมุทรสาคร','Sa Kaeo':'สระแก้ว','Saraburi':'สระบุรี','Sing Buri':'สิงห์บุรี','Sukhothai':'สุโขทัย','Suphan Buri':'สุพรรณบุรี','Surat Thani':'สุราษฎร์ธานี','Surin':'สุรินทร์','Nong Khai':'หนองคาย','Nong Bua Lam Phu':'หนองบัวลำภู','Ang Thong':'อ่างทอง','Amnat Charoen':'อำนาจเจริญ','Udon Thani':'อุดรธานี','Uttaradit':'อุตรดิตถ์','Uthai Thani':'อุทัยธานี','Ubon Ratchathani':'อุบลราชธานี'};
 
@@ -264,13 +265,13 @@ function shortBranch(b) {
                    .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
 }
 
-// ⚠️ ให้สถานะที่ตรงกับการกรอง
+// ตรรกะสถานะ
 function alertStatus(d, days) {
   if(!d) return 'เสนอพิจารณา'; if(days===null) return '—';
   if(days<0) return 'หมดวาระแล้ว';
   if(days<=365) return 'ภายใน 1 ปี';
-  if(days<=730) return '1-2 ปี';
-  if(days<=1095) return '2-3 ปี';
+  if(days<=730) return 'ภายใน 2 ปี';
+  if(days<=1095) return 'ภายใน 3 ปี';
   return 'ปกติ';
 }
 
@@ -286,7 +287,6 @@ function parseCSV(text) {
   if(f||row.length){row.push(f.trim());if(row.some(x=>x))rows.push(row);}
   return rows;
 }
-
 function parseRows(rows) {
   const data=[];
   for(let i=1;i<rows.length;i++){
@@ -345,7 +345,6 @@ function applyGlobalFilters() {
     if(pSearchVal) fData = fData.filter(d=>d.province.includes(pSearchVal));
     if(bVal) fData = fData.filter(d=>d.branch === bVal);
     
-    // ⚠️ ตัดช่วงไม่ให้ปนกันอย่างเด็ดขาด
     if(sVal) {
       if(sVal === 'expired') fData = fData.filter(d => d.days !== null && d.days < 0);
       else if(sVal === '1year') fData = fData.filter(d => d.days !== null && d.days >= 0 && d.days <= 365);
@@ -427,40 +426,62 @@ function renderProvDup(pStatus) {
   document.getElementById('provDupTbody').innerHTML = h;
 }
 
+// ⚠️ ให้ฟังก์ชัน Render Map ทำงานได้อย่างปลอดภัย 100%
 function renderMap(pStatus) {
-  if(typeof Highcharts === 'undefined' || !Highcharts.maps || !Highcharts.maps['countries/th/th-all']) return;
-  const mapData = Highcharts.maps['countries/th/th-all'].features.map(f => {
-    const enName = f.properties.name;
-    const thName = enToThMap[enName] || enName;
-    const pData = pStatus.find(p => p.province === thName);
-    const level = pData ? pData.level : -1;
-    return {
-      'hc-key': f.properties['hc-key'], value: level, provName: thName,
-      statusStr: pData ? pData.status : 'ถูกกรองออก/ไม่มีข้อมูล',
-      detailStr: pData&&pData.detail!=='--' ? `<br/>${pData.detail}` : ''
-    };
-  });
+  try {
+    if(typeof Highcharts === 'undefined' || !Highcharts.maps || !Highcharts.maps['countries/th/th-all']) return;
+    
+    const mapData = Highcharts.maps['countries/th/th-all'].features.map(f => {
+      const enName = f.properties.name;
+      const thName = enToThMap[enName] || enName;
+      const pData = pStatus.find(p => p.province === thName);
+      const level = pData ? pData.level : -1;
+      return {
+        'hc-key': f.properties['hc-key'], value: level, provName: thName,
+        statusStr: pData ? pData.status : 'ถูกกรองออก/ไม่มีข้อมูล',
+        detailStr: pData&&pData.detail!=='--' ? `<br/>${pData.detail}` : ''
+      };
+    });
 
-  Highcharts.mapChart('thailandMap', {
-    chart: { backgroundColor: 'transparent' },
-    title: { text: null },
-    mapNavigation: { enabled: true, buttonOptions: { verticalAlign: 'bottom' } },
-    colorAxis: {
-      dataClasses: [
-        { from:-1, to:-1, color:'#163456', name:'ไม่อยู่ในเงื่อนไข' },
-        { from:0, to:0, color:'#2ecc71', name:'ไม่ซ้ำสาขา' },
-        { from:1, to:1, color:'#f39c12', name:'ซ้ำ 2 สาขา' },
-        { from:2, to:2, color:'#e74c3c', name:'ซ้ำ 3 สาขาขึ้นไป' }
-      ]
-    },
-    series: [{
-      data: mapData, joinBy: 'hc-key', name: 'การซ้ำซ้อน', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 0.5,
-      states: { hover: { color: '#e8c445', borderColor: '#000' } },
-      tooltip: { pointFormat: '<span style="font-family:Sarabun;font-size:14px"><b>{point.provName}</b><br/>สถานะ: <b>{point.statusStr}</b>{point.detailStr}</span>' }
-    }],
-    legend: { itemStyle: { color: '#e2eaf4', fontFamily: 'Sarabun', fontWeight:'normal' }, backgroundColor: 'transparent' },
-    credits: { enabled: false }
-  });
+    if(mapRendered) {
+        // อัปเดตข้อมูลแผนที่เดิมเพื่อความรวดเร็ว
+        const chart = $('#thailandMap').highcharts();
+        if(chart && chart.series && chart.series.length > 0) {
+           chart.series[0].setData(mapData);
+           return;
+        }
+    }
+
+    Highcharts.mapChart('thailandMap', {
+      chart: { backgroundColor: 'transparent' },
+      title: { text: null },
+      mapNavigation: { enabled: true, buttonOptions: { verticalAlign: 'bottom' } },
+      colorAxis: {
+        dataClasses: [
+          { from:-1, to:-1, color:'#163456', name:'ไม่อยู่ในเงื่อนไข' },
+          { from:0, to:0, color:'#2ecc71', name:'ไม่ซ้ำสาขา' },
+          { from:1, to:1, color:'#f39c12', name:'ซ้ำ 2 สาขา' },
+          { from:2, to:2, color:'#e74c3c', name:'ซ้ำ 3 สาขาขึ้นไป' }
+        ]
+      },
+      series: [{
+        data: mapData,
+        mapData: Highcharts.maps['countries/th/th-all'],
+        joinBy: 'hc-key',
+        name: 'การซ้ำซ้อน',
+        borderColor: 'rgba(255,255,255,0.1)',
+        borderWidth: 0.5,
+        states: { hover: { color: '#e8c445', borderColor: '#000' } },
+        tooltip: { pointFormat: '<span style="font-family:Sarabun;font-size:14px"><b>{point.provName}</b><br/>สถานะ: <b>{point.statusStr}</b>{point.detailStr}</span>' }
+      }],
+      legend: { itemStyle: { color: '#e2eaf4', fontFamily: 'Sarabun', fontWeight:'normal' }, backgroundColor: 'transparent' },
+      credits: { enabled: false }
+    });
+    mapRendered = true;
+  } catch(e) {
+     console.error("Map Error:", e);
+     document.getElementById('thailandMap').innerHTML = '<div style="color:var(--text-secondary);text-align:center;padding-top:100px;">แผนที่กำลังโหลด หรือ ไม่พร้อมใช้งาน</div>';
+  }
 }
 
 function renderCharts(data) {
@@ -489,7 +510,11 @@ function renderCharts(data) {
   if(pieChartInst) pieChartInst.destroy();
   pieChartInst = new Chart(document.getElementById('chartBranchPie'), {
     type: 'doughnut',
-    data: { labels: Object.keys(bCounts), datasets: [{ data: Object.values(bCounts), backgroundColor: ['#e8c445','#5dade2','#58d68d','#f1c40f','#e74c3c','#9b59b6'], borderWidth: 0 }] },
+    data: { 
+      labels: Object.keys(bCounts), 
+      // สีสวยๆ ของ Pie Chart สำหรับธีมมืด
+      datasets: [{ data: Object.values(bCounts), backgroundColor: ['#ef4444','#f97316','#f59e0b','#84cc16','#10b981','#06b6d4','#3b82f6','#8b5cf6','#d946ef'], borderWidth: 0 }] 
+    },
     options: { responsive:true, maintainAspectRatio:false, cutout: '65%', plugins: { legend: { position: 'right', labels: { color: '#e2eaf4', font:{family:'Sarabun',size:11} } } } }
   });
 }
@@ -500,13 +525,13 @@ function renderTable(data) {
   let h = '';
   data.forEach(d=>{
     const pc = {
-      'หมดวาระแล้ว':'pill-gray', 'ภายใน 1 ปี':'pill-red', '1-2 ปี':'pill-orange', '2-3 ปี':'pill-yellow', 'ปกติ':'pill-green', 'เสนอพิจารณา':'pill-blue'
+      'หมดวาระแล้ว':'pill-gray', 'ภายใน 1 ปี':'pill-red', 'ภายใน 2 ปี':'pill-orange', 'ภายใน 3 ปี':'pill-yellow', 'ปกติ':'pill-green', 'เสนอพิจารณา':'pill-blue'
     }[d.status]||'pill-green';
 
     h += `<tr class="${d.days<0?'tr-danger':(d.days>=0 && d.days<=365)?'tr-warning':''}">
       <td>${d.no}</td><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td>
       <td class="text-center">${fmtDate(d.appoint)}</td><td class="text-center">${fmtDate(d.expiry)}</td>
-      <td class="text-center">${d.days===null?'—':d.days<0?`<span style="color:#ff6b6b">${d.days}</span>`:`<strong>${d.days}</strong>`}</td>
+      <td class="text-center">${d.days===null?'—':d.days<0?`<span style="color:#ff6b6b">${Math.abs(d.days)} (เกินกำหนด)</span>`:`<strong>${d.days}</strong>`}</td>
       <td><span class="pill ${pc}">${d.status}</span></td>
     </tr>`;
   });
@@ -522,8 +547,8 @@ function processDataText(text) {
     
     provStatusGlobal = analyzeProvinceDups(allData);
     populateDropdowns(allData);
-
-    // เปิดจอให้กว้าง 100% ก่อนจะเริ่มวาดแผนที่
+    
+    // สำคัญ: ต้องให้หน้าจอแสดงผลก่อน (display block) แผนที่ถึงจะวาดได้ตรงขนาด
     document.getElementById('stateLoading').style.display = 'none'; 
     document.getElementById('stateError').style.display = 'none'; 
     document.getElementById('stateDash').style.display = 'block';
@@ -545,11 +570,13 @@ async function loadData() {
     else throw new Error('โหลดไฟล์ไม่สำเร็จ');
   } catch (e) {
     document.getElementById('stateLoading').style.display='none'; document.getElementById('stateError').style.display='block';
-    document.getElementById('errMsg').innerHTML = 'ไม่สามารถเชื่อมต่อลิงก์ Google Sheets ได้';
   }
 }
 
-loadData();
+// รอจนกว่าหน้าเว็บโหลดเสร็จทั้งหมด ค่อยทำการรันดึงข้อมูล
+window.onload = function() {
+    loadData();
+};
 </script>
 </body>
 </html>
