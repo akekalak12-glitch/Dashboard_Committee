@@ -14,75 +14,70 @@
   --text-primary: #e2eaf4; --text-secondary: #7faed4; --text-muted: #4d7a9e;
   --border: rgba(201,162,39,0.2);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun',sans-serif;min-height:100vh;overflow-x:hidden;}
+* {box-sizing:border-box;margin:0;padding:0;}
+body {background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun',sans-serif;min-height:100vh;overflow-x:hidden;}
 
 /* ── Topbar ── */
-.topbar{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-light) 50%,var(--navy) 100%);border-bottom:2px solid var(--gold);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(201,162,39,0.25); flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 1050;}
-.topbar-title{font-size:1.15rem;font-weight:700;color:var(--gold-light);letter-spacing:.03em;}
-.topbar-sub{font-size:.75rem;color:var(--text-secondary);margin-top:2px;}
-.btn-refresh{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 16px;border-radius:4px;cursor:pointer;font-size:.82rem;font-family:'Sarabun',sans-serif;transition:all .2s;}
-.btn-refresh:hover{background:var(--gold);color:var(--navy);}
+.topbar {background:linear-gradient(90deg,var(--navy) 0%,var(--navy-light) 50%,var(--navy) 100%);border-bottom:2px solid var(--gold);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(201,162,39,0.25); flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 1050;}
+.topbar-title {font-size:1.15rem;font-weight:700;color:var(--gold-light);letter-spacing:.03em;}
+.topbar-sub {font-size:.75rem;color:var(--text-secondary);margin-top:2px;}
 
 /* ── Layout Sidebar & Main ── */
-.sidebar{background:var(--navy);border-right:1px solid var(--border);padding:20px;width:280px;flex-shrink:0;height:calc(100vh - 65px);position:sticky;top:65px;overflow-y:auto;}
-.main-content{padding:20px;flex-grow:1;width:calc(100% - 280px);}
+.sidebar {background:var(--navy);border-right:1px solid var(--border);padding:20px;width:280px;flex-shrink:0;height:calc(100vh - 65px);position:sticky;top:65px;overflow-y:auto;}
+.main-content {padding:20px;flex-grow:1;width:calc(100% - 280px);}
 @media(max-width:991px) {
-  .sidebar{width:100%;height:auto;position:relative;top:0;border-right:none;border-bottom:1px solid var(--border);}
-  .main-content{width:100%;}
+  .sidebar {width:100%;height:auto;position:relative;top:0;border-right:none;border-bottom:1px solid var(--border);}
+  .main-content {width:100%;}
 }
 
 /* ── Filters ── */
-.filter-label{font-size:.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;}
-.filter-select{background:var(--navy-light);border:1px solid var(--border);color:var(--text-primary);width:100%;padding:8px 12px;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:.85rem;margin-bottom:16px;outline:none;transition:border .2s;}
-.filter-select:focus{border-color:var(--gold);}
-.filter-select option{background:var(--navy-mid);}
+.filter-label {font-size:.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;}
+.filter-select {background:var(--navy-light);border:1px solid var(--border);color:var(--text-primary);width:100%;padding:8px 12px;border-radius:6px;font-family:'Sarabun',sans-serif;font-size:.85rem;margin-bottom:16px;outline:none;transition:border .2s;}
+.filter-select:focus {border-color:var(--gold);}
+.filter-select option {background:var(--navy-mid);}
 
 /* ── KPI Cards ── */
-.kpi-card{background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;padding:16px 20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;height:100%;}
-.kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
-.kpi-card.danger::before{background:linear-gradient(90deg,#e74c3c,#ff6b6b);}
-.kpi-card.warning::before{background:linear-gradient(90deg,#f39c12,#f1c40f);}
-.kpi-card.info::before{background:linear-gradient(90deg,#3498db,#5dade2);}
-.kpi-card.success::before{background:linear-gradient(90deg,#2ecc71,#58d68d);}
-.kpi-card.gray::before{background:linear-gradient(90deg,#95a5a6,#7f8c8d);}
-.kpi-val{font-size:2.1rem;font-weight:700;line-height:1;margin-bottom:3px;}
-.kpi-lbl{font-size:.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;}
-.kpi-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:2.4rem;opacity:.1;}
+.kpi-card {background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;padding:16px 20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;height:100%;}
+.kpi-card:hover {transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.kpi-card::before {content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+.kpi-card.danger::before {background:linear-gradient(90deg,#e74c3c,#ff6b6b);}
+.kpi-card.warning::before {background:linear-gradient(90deg,#f39c12,#f1c40f);}
+.kpi-card.info::before {background:linear-gradient(90deg,#3498db,#5dade2);}
+.kpi-card.success::before {background:linear-gradient(90deg,#2ecc71,#58d68d);}
+.kpi-val {font-size:2.1rem;font-weight:700;line-height:1;margin-bottom:3px;}
+.kpi-lbl {font-size:.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;}
+.kpi-icon {position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:2.4rem;opacity:.1;}
 
 /* ── Section Cards ── */
-.sc{background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;margin-bottom:20px;overflow:hidden;height:100%; display:flex; flex-direction:column;}
-.sc-head{background:var(--navy-light);padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.sc-title{font-weight:600;font-size:.9rem;color:var(--gold-light);display:flex;align-items:center;gap:8px;}
-.sc-body{padding:16px 18px;flex:1;}
+.sc {background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;margin-bottom:20px;overflow:hidden;height:100%; display:flex; flex-direction:column;}
+.sc-head {background:var(--navy-light);padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sc-title {font-weight:600;font-size:.9rem;color:var(--gold-light);display:flex;align-items:center;gap:8px;}
+.sc-body {padding:16px 18px;flex:1;}
 
 /* ── Tables & Pills ── */
-.t{color:var(--text-primary);font-size:.83rem;width:100%;border-collapse:collapse;}
-.t thead th{background:var(--navy-light);color:var(--gold-light);padding:9px 11px;font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;font-size:.72rem;letter-spacing:.04em;white-space:nowrap;}
-.t tbody tr{border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;}
-.t tbody tr:hover{background:var(--gold-glow);}
-.t tbody td{padding:7px 11px;vertical-align:middle;}
-.tr-danger{background:rgba(231,76,60,.08)!important;}
-.tr-warning{background:rgba(243,156,18,.08)!important;}
+.t {color:var(--text-primary);font-size:.83rem;width:100%;border-collapse:collapse;}
+.t thead th {background:var(--navy-light);color:var(--gold-light);padding:9px 11px;font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;font-size Rama:.72rem;letter-spacing:.04em;white-space:nowrap;}
+.t tbody tr {border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;}
+.t tbody tr:hover {background:var(--gold-glow);}
+.t tbody td {padding:7px 11px;vertical-align:middle;}
+.tr-danger {background:rgba(231,76,60,.08)!important;}
+.tr-warning {background:rgba(243,156,18,.08)!important;}
 
-.pill{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.72rem;font-weight:600;white-space:nowrap;}
-.pill-red{background:rgba(231,76,60,.2);color:#ff7070;border:1px solid rgba(231,76,60,.4);}
-.pill-yellow{background:rgba(243,156,18,.2);color:#f1c40f;border:1px solid rgba(243,156,18,.4);}
-.pill-green{background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.3);}
-.pill-gray{background:rgba(120,120,120,.2);color:#aaa;border:1px solid rgba(120,120,120,.3);}
-.pill-blue{background:rgba(52,152,219,.2);color:#5dade2;border:1px solid rgba(52,152,219,.3);}
+.pill {display:inline-block;padding:2px 9px;border-radius:10px;font-size:.72rem;font-weight:600;white-space:nowrap;}
+.pill-red {background:rgba(231,76,60,.2);color:#ff7070;border:1px solid rgba(231,76,60,.4);}
+.pill-yellow {background:rgba(243,156,18,.2);color:#f1c40f;border:1px solid rgba(243,156,18,.4);}
+.pill-green {background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.3);}
+.pill-gray {background:rgba(120,120,120,.2);color:#aaa;border:1px solid rgba(120,120,120,.3);}
+.pill-blue {background:rgba(52,152,219,.2);color:#5dade2;border:1px solid rgba(52,152,219,.3);}
 
 /* ── Misc ── */
-.loading-box{display:flex;align-items:center;justify-content:center;min-height:220px;color:var(--text-secondary);}
-.spinner{width:36px;height:36px;border:3px solid var(--navy-light);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex-shrink:0;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.error-box{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:24px;text-align:center;color:#ff8080;}
-.chart-wrap{position:relative;height:300px; width: 100%;}
-.map-container{height:450px; width:100%;}
-.table-scroll-y{max-height:350px; overflow-y:auto; border-bottom:1px solid var(--border);}
-.mbar-track{height:6px;background:var(--navy-light);border-radius:3px;margin-top:4px;overflow:hidden;}
-.mbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+.loading-box {display:flex;align-items:center;justify-content:center;min-height:220px;color:var(--text-secondary);}
+.spinner {width:36px;height:36px;border:3px solid var(--navy-light);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex-shrink:0;}
+@keyframes spin {to{transform:rotate(360deg);}}
+.error-box {background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:24px;text-align:center;color:#ff8080;}
+.chart-wrap {position:relative;height:300px; width: 100%;}
+.map-container {height:450px; width:100%;}
+.table-scroll-y {max-height:350px; overflow-y:auto; border-bottom:1px solid var(--border);}
 
 /* DataTables Overrides */
 .dataTables_wrapper .dataTables_length label, .dataTables_wrapper .dataTables_filter label, .dataTables_wrapper .dataTables_info{color:var(--text-secondary)!important;font-size:.83rem;}
@@ -127,9 +122,10 @@ table.dataTable tbody tr{background:transparent!important;}
     <div class="filter-label">⏳ สถานะวันหมดวาระ</div>
     <select id="filterStatus" class="filter-select" onchange="applyGlobalFilters()">
       <option value="">-- ทุกสถานะ --</option>
-      <option value="หมดวาระแล้ว">⚫ หมดวาระแล้ว (เลยกำหนด)</option>
-      <option value="หมดวาระภายใน 1 ปี">🟡 หมดวาระภายใน 1 ปี</option>
-      <option value="ปกติ">🟢 ปกติ (มากกว่า 1 ปี)</option>
+      <option value="วิกฤต">🔴 วิกฤต (น้อยกว่า 30 วัน)</option>
+      <option value="เฝ้าระวัง">🟡 เฝ้าระวัง (น้อยกว่า 90 วัน)</option>
+      <option value="ปกติ">🟢 ปกติ</option>
+      <option value="หมดวาระ">⚫ หมดวาระแล้ว</option>
       <option value="เสนอพิจารณา">🔵 เสนอพิจารณาใหม่</option>
     </select>
 
@@ -155,10 +151,10 @@ table.dataTable tbody tr{background:transparent!important;}
       
       <div class="row g-3 mb-4" id="kpiRow"></div>
 
-      <div class="sc mb-4" id="secAlerts" style="border-color: rgba(243, 156, 18, 0.4);">
-        <div class="sc-head" style="background: rgba(243, 156, 18, 0.1);">
-          <div class="sc-title text-warning">🔔 การแจ้งเตือนกรรมการหมดวาระและใกล้หมดวาระ (ภายใน 1 ปี) <span id="alertBadge" class="badge bg-danger ms-2">0</span></div>
-          <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem; border-color:var(--text-secondary); color:var(--text-secondary)" data-bs-toggle="collapse" data-bs-target="#alertBody">▼ ย่อ/ขยาย</button>
+      <div class="sc mb-4" id="secAlerts">
+        <div class="sc-head">
+          <div class="sc-title">🔔 แจ้งเตือนกรรมการหมดวาระและใกล้หมดวาระ <span id="alertBadge" class="badge bg-danger ms-1">0</span></div>
+          <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem;" data-bs-toggle="collapse" data-bs-target="#alertBody">▼ ย่อ/ขยาย</button>
         </div>
         <div id="alertBody" class="collapse show"><div class="sc-body" id="alertContent"></div></div>
       </div>
@@ -193,7 +189,7 @@ table.dataTable tbody tr{background:transparent!important;}
       <div class="row g-3 mb-4">
         <div class="col-lg-8">
           <div class="sc">
-            <div class="sc-head"><div class="sc-title">📈 ภาพรวมปีที่แต่งตั้งและปีที่ครบวาระ (แนวนอน)</div></div>
+            <div class="sc-head"><div class="sc-title">📅 ภาพรวมปีที่แต่งตั้งและปีที่ครบวาระ (แนวนอน)</div></div>
             <div class="sc-body">
               <div class="chart-wrap">
                 <canvas id="chartTimeline"></canvas>
@@ -211,7 +207,7 @@ table.dataTable tbody tr{background:transparent!important;}
 
       <div class="sc">
         <div class="sc-head">
-          <div class="sc-title">📑 ตารางรายชื่อกรรมการทั้งหมด (อิงตามตัวกรองด้านซ้าย)</div>
+          <div class="sc-title">📑 ตารางรายชื่อกรรมการ (อิงตามตัวกรองด้านซ้าย)</div>
         </div>
         <div class="sc-body">
           <div style="overflow-x:auto;">
@@ -223,7 +219,11 @@ table.dataTable tbody tr{background:transparent!important;}
         </div>
       </div>
 
-    </div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
@@ -232,9 +232,6 @@ table.dataTable tbody tr{background:transparent!important;}
 <script src="https://code.highcharts.com/mapdata/countries/th/th-all.js"></script>
 
 <script>
-// ==========================================
-// การตั้งค่า Google Sheets
-// ==========================================
 const GOOGLE_SHEETS_PUBLISH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQiJomeDXBAnZVk0rXQNotGvfDCGBcjmzxo8lfe7ARg2rCFT2YMedrN0Hs3523NoAPpicbig2PaKtII/pub?gid=700206170&single=true&output=csv';
 
 const TODAY = new Date(); TODAY.setHours(0,0,0,0); 
@@ -243,14 +240,8 @@ let provStatusGlobal = [];
 let dtTable = null;
 let barChartInst = null, pieChartInst = null;
 
-// ==========================================
-// Dictionary แผนที่ (Eng to Thai)
-// ==========================================
 const enToThMap = {'Bangkok':'กรุงเทพมหานคร','Krabi':'กระบี่','Kanchanaburi':'กาญจนบุรี','Kalasin':'กาฬสินธุ์','Kamphaeng Phet':'กำแพงเพชร','Khon Kaen':'ขอนแก่น','Chanthaburi':'จันทบุรี','Chachoengsao':'ฉะเชิงเทรา','Chon Buri':'ชลบุรี','Chai Nat':'ชัยนาท','Chaiyaphum':'ชัยภูมิ','Chumphon':'ชุมพร','Chiang Rai':'เชียงราย','Chiang Mai':'เชียงใหม่','Trang':'ตรัง','Trat':'ตราด','Tak':'ตาก','Nakhon Nayok':'นครนายก','Nakhon Pathom':'นครปฐม','Nakhon Phanom':'นครพนม','Nakhon Ratchasima':'นครราชสีมา','Nakhon Si Thammarat':'นครศรีธรรมราช','Nakhon Sawan':'นครสวรรค์','Nonthaburi':'นนทบุรี','Narathiwat':'นราธิวาส','Nan':'น่าน','Bueng Kan':'บึงกาฬ','Buri Ram':'บุรีรัมย์','Pathum Thani':'ปทุมธานี','Prachuap Khiri Khan':'ประจวบคีรีขันธ์','Prachin Buri':'ปราจีนบุรี','Pattani':'ปัตตานี','Phra Nakhon Si Ayutthaya':'พระนครศรีอยุธยา','Phangnga':'พังงา','Phatthalung':'พัทลุง','Phichit':'พิจิตร','Phitsanulok':'พิษณุโลก','Phetchaburi':'เพชรบุรี','Phetchabun':'เพชรบูรณ์','Phrae':'แพร่','Phayao':'พะเยา','Phuket':'ภูเก็ต','Maha Sarakham':'มหาสารคาม','Mukdahan':'มุกดาหาร','Mae Hong Son':'แม่ฮ่องสอน','Yala':'ยะลา','Yasothon':'ยโสธร','Roi Et':'ร้อยเอ็ด','Ranong':'ระนอง','Rayong':'ระยอง','Ratchaburi':'ราชบุรี','Lop Buri':'ลพบุรี','Lampang':'ลำปาง','Lamphun':'ลำพูน','Loei':'เลย','Si Sa Ket':'ศรีสะเกษ','Sakon Nakhon':'สกลนคร','Songkhla':'สงขลา','Satun':'สตูล','Samut Prakan':'สมุทรปราการ','Samut Songkhram':'สมุทรสงคราม','Samut Sakhon':'สมุทรสาคร','Sa Kaeo':'สระแก้ว','Saraburi':'สระบุรี','Sing Buri':'สิงห์บุรี','Sukhothai':'สุโขทัย','Suphan Buri':'สุพรรณบุรี','Surat Thani':'สุราษฎร์ธานี','Surin':'สุรินทร์','Nong Khai':'หนองคาย','Nong Bua Lam Phu':'หนองบัวลำภู','Ang Thong':'อ่างทอง','Amnat Charoen':'อำนาจเจริญ','Udon Thani':'อุดรธานี','Uttaradit':'อุตรดิตถ์','Uthai Thani':'อุทัยธานี','Ubon Ratchathani':'อุบลราชธานี'};
 
-// ==========================================
-// Utilities
-// ==========================================
 function parseThaiDate(s) {
   if(!s||s.trim()==='-'||s.trim()==='') return null;
   const p=s.trim().split('/'); if(p.length!==3) return null;
@@ -261,18 +252,13 @@ function fmtDate(d) { return !d?'—':`${String(d.getDate()).padStart(2,'0')}/${
 function daysLeft(d) { return !d?null:Math.ceil((d-TODAY)/86400000); }
 function median(arr) { if(!arr.length) return 0; const s=[...arr].sort((a,b)=>a-b), m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
 function shortBranch(b) {
-  return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/โยธา').replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรม','สถาปัตย์/วิศวะ')
+  return (!b?'—':b).replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/โยธา')
                    .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร').replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
                    .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
 }
-
-// ⚠️ ปรับเงื่อนไขการแจ้งเตือน: เน้นเฉพาะ 1 ปี (365 วัน)
 function alertStatus(d, days) {
-  if(!d) return 'เสนอพิจารณา'; 
-  if(days===null) return '—';
-  if(days<0) return 'หมดวาระแล้ว'; 
-  if(days<=365) return 'หมดวาระภายใน 1 ปี'; 
-  return 'ปกติ';
+  if(!d) return 'เสนอพิจารณา'; if(days===null) return '—';
+  if(days<0) return 'หมดวาระ'; if(days<30) return 'วิกฤต'; if(days<90) return 'เฝ้าระวัง'; return 'ปกติ';
 }
 
 function parseCSV(text) {
@@ -346,7 +332,6 @@ function applyGlobalFilters() {
     fData = fData.filter(d=>targetProvs.includes(d.province));
   }
 
-  // หาสถานะการซ้ำซ้อนของจังหวัดเฉพาะที่มีอยู่ในข้อมูลที่ถูกกรอง 
   const presentProvs = [...new Set(fData.map(d=>d.province))];
   const fProvStatus = provStatusGlobal.filter(ps => presentProvs.includes(ps.province));
 
@@ -358,52 +343,41 @@ function applyGlobalFilters() {
   renderTable(fData);
 }
 
+// ⚠️ แก้ไขลอจิกและคำแสดงผลบน KPI Card ตามสั่ง
 function renderKPI(data, pStatus) {
-  const expired = data.filter(d=>d.status==='หมดวาระแล้ว').length;
-  const within1Yr = data.filter(d=>d.status==='หมดวาระภายใน 1 ปี').length;
-  const validDays = data.filter(d=>d.days!==null&&d.days>=0).map(d=>d.days), med = Math.round(median(validDays));
-  const c3 = pStatus.filter(p=>p.level===2).length, c2 = pStatus.filter(p=>p.level===1).length;
+  const crit = data.filter(d=>d.status==='วิกฤต').length, warn = data.filter(d=>d.status==='เฝ้าระวัง').length;
   
+  // 1. ลอจิกหาจังหวัดที่ไม่มี สาขาประเมินราคา/อสังหาริมทรัพย์เลย
+  const allProvs = [...new Set(allData.map(d => d.province))];
+  const noAssetProvs = allProvs.filter(p => {
+    const pItems = allData.filter(d => d.province === p);
+    return !pItems.some(d => d.branch.includes('การประเมินราคาทรัพย์สิน') || d.branch.includes('อสังหาริมทรัพย์'));
+  }).length;
+
+  // 2. ลอจิกหาจำนวนวันของคณะกรรมการที่ใกล้จะหมดวาระที่น้อยที่สุด (ที่ยังไม่หมดวาระ คือ days >= 0)
+  const activeDays = data.filter(d => d.days !== null && d.days >= 0).map(d => d.days);
+  const minDays = activeDays.length > 0 ? Math.min(...activeDays) : 0;
+
   const cards = [
     { v:data.length, lbl:'กรรมการที่พบ', icon:'👥', col:'var(--gold-light)', type:'' },
-    { v:expired, lbl:'หมดวาระแล้ว', icon:'⚫', col:'#aaa', type:'gray' },
-    { v:within1Yr, lbl:'หมดวาระภายใน 1 ปี', icon:'🟡', col:'#f1c40f', type:'warning' },
-    { v:c3+c2, lbl:'จังหวัดที่ซ้ำซ้อน', icon:'⚠️', col:'#5dade2', type:'info' },
-    { v:med, lbl:'Median วันคงเหลือ', icon:'📅', col:'#58d68d', type:'success', bar:Math.round((med/Math.max(...validDays,1))*100) },
+    { v:crit, lbl:'หมดวาระใน 30 วัน', icon:'🔴', col:'#ff6b6b', type:'danger' },
+    { v:crit+warn, lbl:'หมดวาระใน 3 เดือน', icon:'🟡', col:'#f1c40f', type:'warning' },
+    { v:noAssetProvs, lbl:'จังหวัดที่ไม่มี สาขาประเมินราคา/อสังหาฯ', icon:'⚠️', col:'#5dade2', type:'info' },
+    { v:minDays, lbl:'วันของกรรมการที่ใกล้หมดวาระที่น้อยที่สุด', icon:'⏳', col:'#58d68d', type:'success' },
   ];
-  document.getElementById('kpiRow').innerHTML = cards.map(c=>`<div class="col-6 col-md-4 col-xl"><div class="kpi-card ${c.type}"><div class="kpi-val" style="color:${c.col}">${c.v}</div><div class="kpi-lbl">${c.lbl}</div>${c.bar!=null?`<div class="mbar-track"><div class="mbar-fill" style="width:${c.bar}%"></div></div>`:''}<div class="kpi-icon">${c.icon}</div></div></div>`).join('');
+  document.getElementById('kpiRow').innerHTML = cards.map(c=>`<div class="col-6 col-md-4 col-xl"><div class="kpi-card ${c.type}"><div class="kpi-val" style="color:${c.col}">${c.v.toLocaleString()}</div><div class="kpi-lbl">${c.lbl}</div><div class="kpi-icon">${c.icon}</div></div></div>`).join('');
 }
 
 function renderAlerts(data) {
-  // ดึงข้อมูลเฉพาะคนที่หมดวาระแล้ว หรือ จะหมดภายใน 1 ปี
-  const items = data.filter(d=>['หมดวาระแล้ว','หมดวาระภายใน 1 ปี'].includes(d.status)).sort((a,b)=>(a.days??9999)-(b.days??9999));
+  const items = data.filter(d=>['วิกฤต','เฝ้าระวัง','หมดวาระ'].includes(d.status)).sort((a,b)=>(a.days??9999)-(b.days??9999));
   document.getElementById('alertBadge').textContent = items.length;
-  
-  if(!items.length) {
-    document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted)">✅ ไม่มีกรรมการที่หมดวาระหรือใกล้หมดวาระภายใน 1 ปี ในเงื่อนไขที่เลือก</div>`;
-    return;
-  }
-  
-  // สร้างสรุปรายชื่อจังหวัดที่ได้รับผลกระทบ
-  const affectedProvs = [...new Set(items.map(i=>i.province))].sort();
-  let summaryHtml = `
-    <div style="background:rgba(243, 156, 18, 0.08); border: 1px dashed rgba(243, 156, 18, 0.4); padding:12px 16px; border-radius:6px; margin-bottom:15px;">
-      <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;">
-        <span style="font-size:1.1rem">📍</span> <strong>จังหวัดที่ได้รับผลกระทบทั้งหมด (${affectedProvs.length} จังหวัด):</strong>
-      </div>
-      <div style="font-size:0.85rem; color:var(--gold-light); line-height:1.6;">
-        ${affectedProvs.join(' • ')}
-      </div>
-    </div>
-  `;
-
+  if(!items.length) return document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary)">✅ ไม่มีกรรมการใกล้หมดวาระในเงื่อนไขที่เลือก</div>`;
   let h = `<div style="overflow-x:auto;"><table class="t"><thead><tr><th>จังหวัด</th><th>ชื่อ</th><th>สาขา</th><th>วันครบวาระ</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>`;
   items.forEach(d=>{
-    const pc = d.status==='หมดวาระแล้ว'?'pill-gray':'pill-yellow';
-    const trClass = d.status==='หมดวาระแล้ว'?'tr-danger':'tr-warning';
-    h += `<tr class="${trClass}"><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.expiry)}</td><td><strong>${d.days<0?`เลยกำหนด ${Math.abs(d.days)} วัน`:`${d.days} วัน`}</strong></td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
+    const pc=d.status==='วิกฤต'?'pill-red':d.status==='หมดวาระ'?'pill-gray':'pill-yellow';
+    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':'tr-warning'}"><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.expiry)}</td><td><strong>${d.days<0?`หมดแล้ว ${Math.abs(d.days)} วัน`:`${d.days} วัน`}</strong></td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
   });
-  document.getElementById('alertContent').innerHTML = summaryHtml + h + '</tbody></table></div>';
+  document.getElementById('alertContent').innerHTML = h+'</tbody></table></div>';
 }
 
 function renderProvDup(pStatus) {
@@ -464,7 +438,6 @@ function renderMap(pStatus) {
 }
 
 function renderCharts(data) {
-  // 1. Bar Chart: Timeline (ปีแต่งตั้ง และ ปีหมดวาระ) แบบแนวนอน
   const years = new Set();
   const appCount = {};
   const expCount = {};
@@ -496,7 +469,7 @@ function renderCharts(data) {
       ] 
     }, 
     options: { 
-      indexAxis: 'y', // แนวนอน
+      indexAxis: 'y',
       responsive: true, 
       maintainAspectRatio: false, 
       plugins: { 
@@ -517,7 +490,6 @@ function renderCharts(data) {
     } 
   });
 
-  // 2. Pie Chart: สัดส่วนสาขา
   const bCounts = {}; data.forEach(d=>{ const k=shortBranch(d.branch); bCounts[k]=(bCounts[k]||0)+1; });
   if(pieChartInst) pieChartInst.destroy();
   pieChartInst = new Chart(document.getElementById('chartBranchPie'), {
@@ -535,16 +507,8 @@ function renderTable(data) {
   
   let h = '';
   data.forEach(d=>{
-    const pc = {
-      'หมดวาระภายใน 1 ปี': 'pill-yellow', 
-      'ปกติ': 'pill-green', 
-      'หมดวาระแล้ว': 'pill-gray', 
-      'เสนอพิจารณา': 'pill-blue'
-    }[d.status] || 'pill-green';
-
-    const trClass = d.status === 'หมดวาระแล้ว' ? 'tr-danger' : d.status === 'หมดวาระภายใน 1 ปี' ? 'tr-warning' : '';
-
-    h += `<tr class="${trClass}">
+    const pc = {วิกฤต:'pill-red',เฝ้าระวัง:'pill-yellow',ปกติ:'pill-green',หมดวาระ:'pill-gray',เสนอพิจารณา:'pill-blue'}[d.status]||'pill-green';
+    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':d.status==='เฝ้าระวัง'?'tr-warning':''}">
       <td>${d.no}</td><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td>
       <td class="text-center">${fmtDate(d.appoint)}</td><td class="text-center">${fmtDate(d.expiry)}</td>
       <td class="text-center">${d.days===null?'—':d.days<0?`<span style="color:#888">${d.days}</span>`:`<strong>${d.days}</strong>`}</td>
@@ -565,13 +529,8 @@ function processDataText(text) {
     allData = parseRows(rows);
     if (!allData.length) throw new Error('ไม่พบข้อมูล หรือไฟล์ผิดรูปแบบ');
     
-    // คำนวณความซ้ำซ้อนจากฐานข้อมูลรวมทั้งหมดเก็บไว้เป็น Global
     provStatusGlobal = analyzeProvinceDups(allData);
-    
-    // นำค่ามาใส่ใน Dropdown ตัวกรองครั้งแรก
     populateDropdowns(allData);
-    
-    // เรียกใช้ฟังก์ชันประมวลผลพร้อม Filter (ครั้งแรกจะยังไม่มีการเลือกตัวกรอง)
     applyGlobalFilters();
     
     document.getElementById('stateLoading').style.display = 'none'; document.getElementById('stateError').style.display = 'none'; document.getElementById('stateDash').style.display = 'block';
@@ -594,7 +553,6 @@ async function loadData() {
   }
 }
 
-// โหลดข้อมูลอัตโนมัติ
 loadData();
 </script>
 </body>
