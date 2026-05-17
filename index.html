@@ -9,32 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy-dark: #050f1f;
-  --navy: #0a1929;
-  --navy-mid: #0d2137;
-  --navy-light: #163456;
-  --gold: #c9a227;
-  --gold-light: #e8c445;
-  --gold-glow: rgba(201,162,39,0.12);
-  --text-primary: #e2eaf4;
-  --text-secondary: #7faed4;
-  --text-muted: #4d7a9e;
+  --navy-dark: #050f1f; --navy: #0a1929; --navy-mid: #0d2137; --navy-light: #163456;
+  --gold: #c9a227; --gold-light: #e8c445; --gold-glow: rgba(201,162,39,0.12);
+  --text-primary: #e2eaf4; --text-secondary: #7faed4; --text-muted: #4d7a9e;
   --border: rgba(201,162,39,0.2);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun',sans-serif;min-height:100vh;}
-
-/* ── Navbar ── */
 .topbar{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-light) 50%,var(--navy) 100%);border-bottom:2px solid var(--gold);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(201,162,39,0.25); flex-wrap: wrap; gap: 10px;}
 .topbar-title{font-size:1.3rem;font-weight:700;color:var(--gold-light);letter-spacing:.04em;}
 .topbar-sub{font-size:.75rem;color:var(--text-secondary);margin-top:2px;}
 .btn-refresh{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 16px;border-radius:4px;cursor:pointer;font-size:.82rem;font-family:'Sarabun',sans-serif;transition:all .2s;}
 .btn-refresh:hover{background:var(--gold);color:var(--navy);}
-
-/* ── Layout ── */
 .wrap{padding:20px;max-width:1640px;margin:0 auto;}
-
-/* ── KPI Cards ── */
 .kpi-card{background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;padding:16px 20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
 .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
 .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
@@ -46,14 +33,10 @@ body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun'
 .kpi-lbl{font-size:.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;}
 .kpi-sub{font-size:.68rem;color:var(--text-muted);margin-top:2px;}
 .kpi-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:2.4rem;opacity:.1;}
-
-/* ── Section Cards ── */
 .sc{background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;margin-bottom:20px;overflow:hidden;}
 .sc-head{background:var(--navy-light);padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .sc-title{font-weight:600;font-size:.9rem;color:var(--gold-light);display:flex;align-items:center;gap:8px;}
 .sc-body{padding:16px 18px;}
-
-/* ── Tables ── */
 .t{color:var(--text-primary);font-size:.83rem;width:100%;border-collapse:collapse;}
 .t thead th{background:var(--navy-light);color:var(--gold-light);padding:9px 11px;font-weight:600;border-bottom:1px solid var(--border);text-transform:uppercase;font-size:.72rem;letter-spacing:.04em;white-space:nowrap;}
 .t tbody tr{border-bottom:1px solid rgba(255,255,255,0.05);transition:background .15s;}
@@ -62,45 +45,29 @@ body{background:var(--navy-dark);color:var(--text-primary);font-family:'Sarabun'
 .tr-danger{background:rgba(231,76,60,.08)!important;}
 .tr-warning{background:rgba(243,156,18,.08)!important;}
 .tr-dup{background:rgba(231,76,60,.05)!important;}
-
-/* ── Status Pills ── */
 .pill{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.72rem;font-weight:600;white-space:nowrap;}
 .pill-red{background:rgba(231,76,60,.2);color:#ff7070;border:1px solid rgba(231,76,60,.4);}
 .pill-yellow{background:rgba(243,156,18,.2);color:#f1c40f;border:1px solid rgba(243,156,18,.4);}
 .pill-green{background:rgba(46,204,113,.15);color:#2ecc71;border:1px solid rgba(46,204,113,.3);}
 .pill-gray{background:rgba(120,120,120,.2);color:#aaa;border:1px solid rgba(120,120,120,.3);}
 .pill-blue{background:rgba(52,152,219,.2);color:#5dade2;border:1px solid rgba(52,152,219,.3);}
-
-/* ── Loading / Error ── */
 .loading-box{display:flex;align-items:center;justify-content:center;min-height:220px;color:var(--text-secondary);}
 .spinner{width:36px;height:36px;border:3px solid var(--navy-light);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-right:12px;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .error-box{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:24px;text-align:center;color:#ff8080;}
-
-/* ── Chart ── */
 .chart-wrap{position:relative;height:300px;}
 .chart-scroll{overflow-x:auto;padding-bottom:6px;}
-
-/* ── DataTables overrides ── */
-.dataTables_wrapper .dataTables_length label,
-.dataTables_wrapper .dataTables_filter label,
-.dataTables_wrapper .dataTables_info{color:var(--text-secondary)!important;font-size:.83rem;}
-.dataTables_wrapper .dataTables_filter input,
-.dataTables_wrapper .dataTables_length select{background:var(--navy-light)!important;border:1px solid var(--border)!important;color:var(--text-primary)!important;border-radius:4px;padding:4px 8px;}
+.dataTables_wrapper .dataTables_length label, .dataTables_wrapper .dataTables_filter label, .dataTables_wrapper .dataTables_info{color:var(--text-secondary)!important;font-size:.83rem;}
+.dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select{background:var(--navy-light)!important;border:1px solid var(--border)!important;color:var(--text-primary)!important;border-radius:4px;padding:4px 8px;}
 .dataTables_wrapper .paginate_button{color:var(--text-secondary)!important;border-radius:4px!important;}
 .dataTables_wrapper .paginate_button.current{background:var(--gold)!important;border-color:var(--gold)!important;color:var(--navy)!important;}
 .dataTables_wrapper .paginate_button:hover:not(.current){background:var(--gold-glow)!important;border-color:var(--gold)!important;color:var(--gold-light)!important;}
 table.dataTable tbody tr{background:transparent!important;}
 table.dataTable tbody tr.tr-danger{background:rgba(231,76,60,.08)!important;}
 table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
-
-/* ── Filters ── */
 .ft-sel{background:var(--navy-light);border:1px solid var(--border);color:var(--text-primary);padding:4px 8px;border-radius:4px;font-size:.8rem;font-family:'Sarabun',sans-serif;cursor:pointer;}
-
-/* ── Median bar ── */
 .mbar-track{height:6px;background:var(--navy-light);border-radius:3px;margin-top:4px;overflow:hidden;}
 .mbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
-
 @media(max-width:768px){.wrap{padding:12px;}.kpi-val{font-size:1.6rem;}}
 </style>
 </head>
@@ -108,64 +75,52 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
 
 <div class="topbar">
   <div>
-    <div class="topbar-title">⚖️ Dashboard ศป. &mdash; ระบบติดตามกรรมการประเมินราคาทรัพย์สิน</div>
-    <div class="topbar-sub">ดึงข้อมูลอัตโนมัติจาก Google Drive หรืออัปโหลดไฟล์ CSV</div>
+    <div class="topbar-title">⚖️ Dashboard ศป. &mdash; ระบบติดตามกรรมการประเมินราคา</div>
+    <div class="topbar-sub">ดึงข้อมูลอัตโนมัติจาก Google Drive (ผ่านระบบ CORS Proxy)</div>
   </div>
   <div class="d-flex align-items-center gap-3">
-    <input type="file" id="csvFileInput" accept=".csv" class="form-control form-control-sm" style="max-width: 250px; background: var(--navy-light); color: white; border: 1px solid var(--border);" title="เลือกไฟล์ CSV สำรอง">
-    
+    <input type="file" id="csvFileInput" accept=".csv" class="form-control form-control-sm d-none">
+    <button class="btn-refresh" onclick="document.getElementById('csvFileInput').click()" style="border-color:var(--text-secondary); color:var(--text-secondary);">📁 อัปโหลดไฟล์แทน</button>
     <span id="lastUpdated" style="font-size:.75rem;color:var(--text-muted);">รอโหลดข้อมูล...</span>
-    <button class="btn-refresh" onclick="loadData()">🔄 รีเฟรช</button>
+    <button class="btn-refresh" onclick="loadData()">🔄 ดึงข้อมูลใหม่</button>
   </div>
 </div>
 
 <div class="wrap">
-
   <div id="stateLoading" class="loading-box" style="display:flex;">
-    <div class="spinner"></div><span>กำลังดึงข้อมูลจาก Google Drive...</span>
+    <div class="spinner"></div><span>กำลังแอบดึงข้อมูลจาก Google Drive...</span>
   </div>
 
   <div id="stateError" style="display:none;" class="error-box">
     <div style="font-size:2rem;margin-bottom:8px;">⚠️</div>
-    <div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;">ไม่สามารถดึงข้อมูลจากลิงก์ Google Drive ได้</div>
+    <div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;">ดึงข้อมูลล้มเหลว</div>
     <div id="errMsg" style="font-size:.88rem;opacity:.85;margin-bottom:12px;"></div>
     <div style="font-size:.82rem;color:var(--text-secondary);line-height:1.8;">
-      <strong>วิธีแก้:</strong> 1. เปิดไฟล์นั้นด้วย Google Sheets 2. ตั้งค่าแชร์เป็น "ทุกคนที่มีลิงก์ (Anyone with the link)" <br>
-      หรือ <strong>วิธีสำรอง:</strong> คุณสามารถกด "เลือกไฟล์" ที่มุมขวาบน เพื่ออัปโหลดไฟล์ CSV จากเครื่องได้ทันทีครับ
+      อย่าลืมเข้าไปที่ Google Drive -> คลิกขวาที่ไฟล์ -> แชร์ -> เลือก <strong>"ทุกคนที่มีลิงก์"</strong> (Anyone with the link)
     </div>
   </div>
 
   <div id="stateDash" style="display:none;">
-
     <div class="row g-3 mb-4" id="kpiRow"></div>
-
     <div class="sc" id="secAlerts">
       <div class="sc-head">
         <div class="sc-title">🔔 การแจ้งเตือนวันหมดวาระ <span id="alertBadge" class="badge bg-danger ms-1">0</span></div>
         <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem;" data-bs-toggle="collapse" data-bs-target="#alertBody">▼ ย่อ/ขยาย</button>
       </div>
-      <div id="alertBody" class="collapse show">
-        <div class="sc-body" id="alertContent"></div>
-      </div>
+      <div id="alertBody" class="collapse show"><div class="sc-body" id="alertContent"></div></div>
     </div>
-
     <div class="sc" id="secDup">
       <div class="sc-head">
-        <div class="sc-title">🔍 รายการที่ต้องตรวจสอบ — สาขาซ้ำในจังหวัด <span id="dupBadge" class="badge bg-warning text-dark ms-1">0</span></div>
+        <div class="sc-title">🔍 รายการสาขาซ้ำในจังหวัด <span id="dupBadge" class="badge bg-warning text-dark ms-1">0</span></div>
         <button class="btn-refresh" style="padding:3px 10px;font-size:.75rem;" data-bs-toggle="collapse" data-bs-target="#dupBody">▼ ย่อ/ขยาย</button>
       </div>
-      <div id="dupBody" class="collapse show">
-        <div class="sc-body" id="dupContent"></div>
-      </div>
+      <div id="dupBody" class="collapse show"><div class="sc-body" id="dupContent"></div></div>
     </div>
-
     <div class="row g-3 mb-4">
       <div class="col-lg-8">
         <div class="sc h-100">
           <div class="sc-head"><div class="sc-title">📊 จำนวนกรรมการแยกตามจังหวัด</div></div>
-          <div class="sc-body">
-            <div class="chart-scroll"><div class="chart-wrap"><canvas id="chartProvince"></canvas></div></div>
-          </div>
+          <div class="sc-body"><div class="chart-scroll"><div class="chart-wrap"><canvas id="chartProvince"></canvas></div></div></div>
         </div>
       </div>
       <div class="col-lg-4">
@@ -175,114 +130,80 @@ table.dataTable tbody tr.tr-warning{background:rgba(243,156,18,.08)!important;}
         </div>
       </div>
     </div>
-
     <div class="sc">
       <div class="sc-head">
         <div class="sc-title">📑 รายชื่อกรรมการทั้งหมด</div>
         <div class="d-flex gap-2 flex-wrap">
-          <select id="filterBranch" class="ft-sel" onchange="applyFilters()">
-            <option value="">ทุกสาขา</option>
-          </select>
+          <select id="filterBranch" class="ft-sel" onchange="applyFilters()"><option value="">ทุกสาขา</option></select>
           <select id="filterStatus" class="ft-sel" onchange="applyFilters()">
             <option value="">ทุกสถานะ</option>
-            <option value="วิกฤต">🔴 วิกฤต</option>
-            <option value="เฝ้าระวัง">🟡 เฝ้าระวัง</option>
-            <option value="ปกติ">🟢 ปกติ</option>
-            <option value="หมดวาระ">⚫ หมดวาระ</option>
-            <option value="เสนอพิจารณา">🔵 เสนอพิจารณา</option>
+            <option value="วิกฤต">🔴 วิกฤต</option><option value="เฝ้าระวัง">🟡 เฝ้าระวัง</option>
+            <option value="ปกติ">🟢 ปกติ</option><option value="หมดวาระ">⚫ หมดวาระ</option><option value="เสนอพิจารณา">🔵 เสนอพิจารณา</option>
           </select>
         </div>
       </div>
       <div class="sc-body">
         <div style="overflow-x:auto;">
           <table id="mainTable" class="t display" style="width:100%">
-            <thead><tr>
-              <th>#</th><th>จังหวัด</th><th>ชื่อ-สกุล</th>
-              <th>สาขาเชี่ยวชาญ</th><th>วันแต่งตั้ง</th>
-              <th>วันครบวาระ</th><th>คงเหลือ (วัน)</th><th>สถานะ</th>
-            </tr></thead>
+            <thead><tr><th>#</th><th>จังหวัด</th><th>ชื่อ-สกุล</th><th>สาขาเชี่ยวชาญ</th><th>วันแต่งตั้ง</th><th>วันครบวาระ</th><th>คงเหลือ (วัน)</th><th>สถานะ</th></tr></thead>
             <tbody id="mainTbody"></tbody>
           </table>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-  </div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-// ─────────────────────────────────────────
-// Config: อัปเดตใส่ ID ไฟล์ที่คุณส่งมา (1PYacF3FThSjLY3n4CagbQn9uthOSbCH8)
-// ─────────────────────────────────────────
-const SHEET_ID = '1PYacF3FThSjLY3n4CagbQn9uthOSbCH8';
-// URL ดึงข้อมูล (รองรับทั้งแบบตีพิมพ์ Publish และแบบแชร์ Share ธรรมดา)
-const URL_PUB  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=0`;
-const URL_EXP  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+// ==========================================
+// การตั้งค่า Google Drive (CORS Proxy Trick)
+// ==========================================
+const FILE_ID = '1PYacF3FThSjLY3n4CagbQn9uthOSbCH8'; 
+const DRIVE_URL = `https://drive.google.com/uc?export=download&id=${FILE_ID}`;
+
+// ใช้ Proxy เพื่อหลอกข้ามการบล็อก CORS ของเบราว์เซอร์
+const PROXY_URLS = [
+  `https://corsproxy.io/?${encodeURIComponent(DRIVE_URL)}`,
+  `https://api.allorigins.win/raw?url=${encodeURIComponent(DRIVE_URL)}`
+];
 
 const TODAY = new Date();
 TODAY.setHours(0,0,0,0); 
 
-let allData = [];
-let dtTable = null;
-let chartInst = null;
+let allData = [], dtTable = null, chartInst = null;
 
-// ─────────────────────────────────────────
-// Utilities
-// ─────────────────────────────────────────
 function parseThaiDate(s) {
   if (!s || s.trim() === '-' || s.trim() === '') return null;
-  s = s.trim();
-  const p = s.split('/');
+  const p = s.trim().split('/');
   if (p.length !== 3) return null;
   const yr = parseInt(p[2]) - 543;
   if (isNaN(yr)) return null;
   return new Date(yr, parseInt(p[1]) - 1, parseInt(p[0]));
 }
-
-function fmtDate(d) {
-  if (!d) return '—';
-  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()+543}`;
-}
-
-function daysLeft(d) {
-  if (!d) return null;
-  return Math.ceil((d - TODAY) / 86400000);
-}
-
+function fmtDate(d) { return !d ? '—' : `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()+543}`; }
+function daysLeft(d) { return !d ? null : Math.ceil((d - TODAY) / 86400000); }
 function median(arr) {
   if (!arr.length) return 0;
-  const s = [...arr].sort((a,b)=>a-b);
-  const m = Math.floor(s.length/2);
+  const s = [...arr].sort((a,b)=>a-b), m = Math.floor(s.length/2);
   return s.length % 2 ? s[m] : (s[m-1]+s[m])/2;
 }
-
 function shortBranch(b) {
   if (!b) return '—';
-  return b
-    .replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/วิศวกรรมโยธา')
-    .replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรม','สถาปัตย์/วิศวกรรม')
-    .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร')
-    .replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
-    .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
+  return b.replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรมโยธา','สถาปัตย์/วิศวกรรมโยธา').replace('ด้านสถาปัตยกรรมหรือด้านวิศวกรรม','สถาปัตย์/วิศวกรรม')
+          .replace('ด้านเศรษฐศาสตร์หรือด้านบริหารธุรกิจ','เศรษฐศาสตร์/บริหาร').replace('ด้านกฎหมายหรือด้านรัฐศาสตร์','กฎหมาย/รัฐศาสตร์')
+          .replace('ด้านการประเมินราคาทรัพย์สินหรือด้านอสังหาริมทรัพย์','ประเมินราคา/อสังหาฯ');
 }
-
 function alertStatus(d, days) {
-  if (!d) return 'เสนอพิจารณา';
-  if (days === null) return '—';
-  if (days < 0)  return 'หมดวาระ';
-  if (days < 30) return 'วิกฤต';
-  if (days < 90) return 'เฝ้าระวัง';
-  return 'ปกติ';
+  if (!d) return 'เสนอพิจารณา'; if (days === null) return '—';
+  if (days < 0) return 'หมดวาระ'; if (days < 30) return 'วิกฤต'; if (days < 90) return 'เฝ้าระวัง'; return 'ปกติ';
 }
-
-// ─────────────────────────────────────────
-// CSV Parser (handles quoted fields)
-// ─────────────────────────────────────────
 function parseCSV(text) {
-  const rows = [];
-  let row=[], f='', q=false;
+  const rows = []; let row=[], f='', q=false;
   for (let i=0; i<text.length; i++) {
     const c=text[i];
     if (c==='"') { if(q&&text[i+1]==='"'){f+='"';i++;}else{q=!q;} }
@@ -293,350 +214,141 @@ function parseCSV(text) {
   if (f||row.length){ row.push(f.trim()); if(row.some(x=>x)) rows.push(row); }
   return rows;
 }
-
-// ─────────────────────────────────────────
-// Parse Rows → Data Objects
-// ─────────────────────────────────────────
 function parseRows(rows) {
   const data = [];
   for (let i=1; i<rows.length; i++) {
-    const r = rows[i];
-    if (r.length < 6 || !r[1] || !r[2]) continue;
-    const expiry = parseThaiDate(r[6]);
-    const days   = daysLeft(expiry);
-    const status = alertStatus(expiry, days);
-    data.push({
-      no:       r[0],
-      province: r[1].trim(),
-      name:     r[2].trim(),
-      edu:      r[3].trim(),
-      branch:   r[4].trim(),
-      appoint:  parseThaiDate(r[5]),
-      expiry,
-      days,
-      status,
-    });
+    const r = rows[i]; if (r.length < 6 || !r[1] || !r[2]) continue;
+    const expiry = parseThaiDate(r[6]), days = daysLeft(expiry), status = alertStatus(expiry, days);
+    data.push({ no:r[0], province:r[1].trim(), name:r[2].trim(), edu:r[3].trim(), branch:r[4].trim(), appoint:parseThaiDate(r[5]), expiry, days, status });
   }
   return data;
 }
-
-// ─────────────────────────────────────────
-// Duplicate Detection
-// ─────────────────────────────────────────
 function findDups(data) {
-  const map = {};
-  data.forEach(d => {
-    const k = `${d.province}|||${d.branch}`;
-    (map[k] = map[k]||[]).push(d);
-  });
-  return Object.entries(map)
-    .filter(([,v])=>v.length>1)
-    .map(([k,v])=>({ province:k.split('|||')[0], branch:k.split('|||')[1], members:v }));
+  const map = {}; data.forEach(d => { const k = `${d.province}|||${d.branch}`; (map[k] = map[k]||[]).push(d); });
+  return Object.entries(map).filter(([,v])=>v.length>1).map(([k,v])=>({ province:k.split('|||')[0], branch:k.split('|||')[1], members:v }));
 }
-
-// ─────────────────────────────────────────
-// Render UI
-// ─────────────────────────────────────────
 function renderKPI(data, dups) {
-  const total     = data.length;
-  const crit      = data.filter(d=>d.status==='วิกฤต').length;
-  const warn      = data.filter(d=>d.status==='เฝ้าระวัง').length;
-  const within90  = crit + warn;
-  const dupPeople = dups.reduce((a,d)=>a+d.members.length, 0);
-  const validDays = data.filter(d=>d.days!==null&&d.days>=0).map(d=>d.days);
-  const med       = Math.round(median(validDays));
-  const maxDays   = Math.max(...validDays, 1);
-  const medPct    = Math.round((med/maxDays)*100);
-
+  const crit = data.filter(d=>d.status==='วิกฤต').length, warn = data.filter(d=>d.status==='เฝ้าระวัง').length;
+  const validDays = data.filter(d=>d.days!==null&&d.days>=0).map(d=>d.days), med = Math.round(median(validDays));
   const cards = [
-    { v:total,    lbl:'กรรมการทั้งหมด',          icon:'👥', col:'var(--gold-light)', type:'',       unit:'ท่าน' },
-    { v:crit,     lbl:'หมดวาระใน 30 วัน',         icon:'🔴', col:'#ff6b6b',          type:'danger',  unit:'ท่าน' },
-    { v:within90, lbl:'หมดวาระใน 3 เดือน (≤90 วัน)',icon:'🟡',col:'#f1c40f',          type:'warning', unit:'ท่าน' },
-    { v:dupPeople,lbl:'รายการสาขาซ้ำ',             icon:'⚠️', col:'#5dade2',          type:'info',    unit:'ราย' },
-    { v:med,      lbl:'Median วันคงเหลือ',          icon:'📅', col:'#58d68d',          type:'success', unit:'วัน', bar:medPct },
+    { v:data.length, lbl:'กรรมการทั้งหมด', icon:'👥', col:'var(--gold-light)', type:'' },
+    { v:crit, lbl:'หมดวาระใน 30 วัน', icon:'🔴', col:'#ff6b6b', type:'danger' },
+    { v:crit+warn, lbl:'หมดวาระใน 3 เดือน', icon:'🟡', col:'#f1c40f', type:'warning' },
+    { v:dups.reduce((a,d)=>a+d.members.length, 0), lbl:'รายการสาขาซ้ำ', icon:'⚠️', col:'#5dade2', type:'info' },
+    { v:med, lbl:'Median วันคงเหลือ', icon:'📅', col:'#58d68d', type:'success', bar:Math.round((med/Math.max(...validDays, 1))*100) },
   ];
-
-  document.getElementById('kpiRow').innerHTML = cards.map(c=>`
-    <div class="col-6 col-md-4 col-xl">
-      <div class="kpi-card ${c.type}">
-        <div class="kpi-val" style="color:${c.col}">${c.v.toLocaleString()}</div>
-        <div class="kpi-lbl">${c.lbl}</div>
-        ${c.bar!=null?`<div class="mbar-track"><div class="mbar-fill" style="width:${c.bar}%"></div></div>`:''}
-        <div class="kpi-icon">${c.icon}</div>
-      </div>
-    </div>`).join('');
+  document.getElementById('kpiRow').innerHTML = cards.map(c=>`<div class="col-6 col-md-4 col-xl"><div class="kpi-card ${c.type}"><div class="kpi-val" style="color:${c.col}">${c.v}</div><div class="kpi-lbl">${c.lbl}</div>${c.bar!=null?`<div class="mbar-track"><div class="mbar-fill" style="width:${c.bar}%"></div></div>`:''}<div class="kpi-icon">${c.icon}</div></div></div>`).join('');
 }
-
 function renderAlerts(data) {
-  const items = data.filter(d=>['วิกฤต','เฝ้าระวัง','หมดวาระ'].includes(d.status))
-                    .sort((a,b)=>(a.days??9999)-(b.days??9999));
+  const items = data.filter(d=>['วิกฤต','เฝ้าระวัง','หมดวาระ'].includes(d.status)).sort((a,b)=>(a.days??9999)-(b.days??9999));
   document.getElementById('alertBadge').textContent = items.length;
-
-  if (!items.length) {
-    document.getElementById('alertContent').innerHTML =
-      `<div style="text-align:center;color:var(--text-muted);padding:20px;">✅ ไม่มีกรรมการที่ใกล้หมดวาระในขณะนี้</div>`;
-    return;
-  }
-
-  let h = `<div style="overflow-x:auto;"><table class="t">
-    <thead><tr><th>จังหวัด</th><th>ชื่อ-สกุล</th><th>สาขา</th><th>วันครบวาระ</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>`;
+  if (!items.length) return document.getElementById('alertContent').innerHTML = `<div style="text-align:center;padding:20px;">✅ ไม่มีกรรมการใกล้หมดวาระ</div>`;
+  let h = `<div style="overflow-x:auto;"><table class="t"><thead><tr><th>จังหวัด</th><th>ชื่อ</th><th>สาขา</th><th>วันครบวาระ</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>`;
   items.forEach(d=>{
-    const rc = d.status==='วิกฤต'||d.status==='หมดวาระ' ? 'tr-danger' : 'tr-warning';
     const pc = d.status==='วิกฤต' ? 'pill-red' : d.status==='หมดวาระ' ? 'pill-gray' : 'pill-yellow';
-    const dTxt = d.days<0 ? `หมดไปแล้ว ${Math.abs(d.days)} วัน` : `${d.days} วัน`;
-    h += `<tr class="${rc}">
-      <td><strong>${d.province}</strong></td>
-      <td>${d.name}</td>
-      <td><small>${shortBranch(d.branch)}</small></td>
-      <td>${fmtDate(d.expiry)}</td>
-      <td><strong>${dTxt}</strong></td>
-      <td><span class="pill ${pc}">${d.status}</span></td>
-    </tr>`;
+    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':'tr-warning'}"><td><strong>${d.province}</strong></td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td>${fmtDate(d.expiry)}</td><td><strong>${d.days<0?`หมดแล้ว ${Math.abs(d.days)} วัน`:`${d.days} วัน`}</strong></td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
   });
-  h += '</tbody></table></div>';
-  document.getElementById('alertContent').innerHTML = h;
+  document.getElementById('alertContent').innerHTML = h+'</tbody></table></div>';
 }
-
 function renderDups(dups) {
-  const total = dups.reduce((a,d)=>a+d.members.length,0);
-  document.getElementById('dupBadge').textContent = total;
-
-  if (!dups.length) {
-    document.getElementById('dupContent').innerHTML =
-      `<div style="text-align:center;color:var(--text-muted);padding:20px;">✅ ไม่พบสาขาเชี่ยวชาญซ้ำในจังหวัดเดียวกัน</div>`;
-    return;
-  }
-
-  let h = `<div style="overflow-x:auto;"><table class="t">
-    <thead><tr><th>จังหวัด</th><th>สาขาที่ซ้ำ</th><th>ชื่อ-สกุล</th><th>วันแต่งตั้ง</th><th>วันครบวาระ</th><th>หมายเหตุ</th></tr></thead><tbody>`;
-  dups.forEach(dup=>{
-    dup.members.forEach((m,idx)=>{
-      h += `<tr class="tr-dup">
-        <td>${idx===0?`<strong>${dup.province}</strong><br><small style="color:var(--text-muted)">${dup.members.length} ท่าน ซ้ำสาขา</small>`:''}</td>
-        <td><small>${shortBranch(dup.branch)}</small></td>
-        <td>${m.name}</td>
-        <td>${fmtDate(m.appoint)}</td>
-        <td>${fmtDate(m.expiry)}</td>
-        <td><span class="pill pill-red">⚠️ ซ้ำ</span></td>
-      </tr>`;
-    });
-  });
-  h += '</tbody></table></div>';
-  document.getElementById('dupContent').innerHTML = h;
+  document.getElementById('dupBadge').textContent = dups.reduce((a,d)=>a+d.members.length,0);
+  if (!dups.length) return document.getElementById('dupContent').innerHTML = `<div style="text-align:center;padding:20px;">✅ ไม่พบสาขาซ้ำ</div>`;
+  let h = `<div style="overflow-x:auto;"><table class="t"><thead><tr><th>จังหวัด</th><th>สาขาที่ซ้ำ</th><th>ชื่อ</th><th>แต่งตั้ง</th><th>ครบวาระ</th></tr></thead><tbody>`;
+  dups.forEach(dup=>dup.members.forEach((m,i)=>{ h += `<tr class="tr-dup"><td>${i===0?`<strong>${dup.province}</strong>`:''}</td><td><small>${shortBranch(dup.branch)}</small></td><td>${m.name}</td><td>${fmtDate(m.appoint)}</td><td>${fmtDate(m.expiry)}</td></tr>`; }));
+  document.getElementById('dupContent').innerHTML = h+'</tbody></table></div>';
 }
-
 function renderChart(data) {
-  const counts = {};
-  data.forEach(d=>{ counts[d.province]=(counts[d.province]||0)+1; });
+  const counts = {}; data.forEach(d=>{ counts[d.province]=(counts[d.province]||0)+1; });
   const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const labels = sorted.map(e=>e[0]);
-  const values = sorted.map(e=>e[1]);
-  const colors = values.map(v=>
-    v>=4 ? 'rgba(231,76,60,0.75)' : v===3 ? 'rgba(243,156,18,0.75)' : 'rgba(201,162,39,0.75)');
-
-  const canvas = document.getElementById('chartProvince');
-  if (labels.length > 35) {
-    canvas.style.width = (labels.length * 26) + 'px';
-    canvas.style.minWidth = '100%';
-  }
-  canvas.parentElement.style.height = '300px';
-
   if (chartInst) chartInst.destroy();
-  chartInst = new Chart(canvas, {
-    type: 'bar',
-    data: { labels, datasets: [{ data:values, backgroundColor:colors,
-      borderColor:colors.map(c=>c.replace('0.75','1')), borderWidth:1, borderRadius:3 }] },
-    options: {
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y} ท่าน`}} },
-      scales:{
-        x:{ ticks:{color:'#8ab4d4',font:{size:10,family:'Sarabun'},maxRotation:65},
-            grid:{color:'rgba(255,255,255,0.05)'} },
-        y:{ ticks:{color:'#8ab4d4',stepSize:1},
-            grid:{color:'rgba(255,255,255,0.08)'}, beginAtZero:true }
-      }
-    }
-  });
+  const c = document.getElementById('chartProvince');
+  c.style.width = (sorted.length * 26) + 'px'; c.style.minWidth = '100%';
+  chartInst = new Chart(c, { type: 'bar', data: { labels: sorted.map(e=>e[0]), datasets: [{ data:sorted.map(e=>e[1]), backgroundColor:sorted.map(e=>e[1]>=4?'rgba(231,76,60,0.8)':e[1]===3?'rgba(243,156,18,0.8)':'rgba(201,162,39,0.8)') }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{ticks:{color:'#8ab4d4',font:{size:10}}},y:{beginAtZero:true,ticks:{color:'#8ab4d4',stepSize:1}}} } });
 }
-
 function renderBranch(data) {
-  const counts = {};
-  data.forEach(d=>{ const k=shortBranch(d.branch); counts[k]=(counts[k]||0)+1; });
+  const counts = {}, daysBy = {}; 
+  data.forEach(d=>{ const k=shortBranch(d.branch); counts[k]=(counts[k]||0)+1; if(d.days!==null&&d.days>=0)(daysBy[k]=daysBy[k]||[]).push(d.days); });
   const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const total = data.length;
-
-  const daysByBranch = {};
-  data.forEach(d=>{
-    const k=shortBranch(d.branch);
-    if (d.days!==null&&d.days>=0) (daysByBranch[k]=daysByBranch[k]||[]).push(d.days);
-  });
-
-  let h = `<table class="t">
-    <thead><tr><th>สาขา</th><th style="text-align:right">จำนวน</th><th style="text-align:right">%</th><th style="text-align:right">Median วัน</th></tr></thead><tbody>`;
-  sorted.forEach(([b,c])=>{
-    const pct=((c/total)*100).toFixed(1);
-    const med = daysByBranch[b] ? Math.round(median(daysByBranch[b])) : '—';
-    h+=`<tr>
-      <td style="font-size:.78rem">${b}</td>
-      <td style="text-align:right;font-weight:600;color:var(--gold-light)">${c}</td>
-      <td style="text-align:right;color:var(--text-secondary)">${pct}%</td>
-      <td style="text-align:right;color:#58d68d;font-size:.8rem">${med}</td>
-    </tr>`;
-  });
-  h+=`<tr style="border-top:1px solid var(--gold)">
-    <td style="font-weight:700;color:var(--gold-light)">รวม</td>
-    <td style="text-align:right;font-weight:700;color:var(--gold-light)">${total}</td>
-    <td style="text-align:right;color:var(--gold-light)">100%</td>
-    <td></td>
-  </tr></tbody></table>`;
-  document.getElementById('branchTable').innerHTML = h;
+  let h = `<table class="t"><thead><tr><th>สาขา</th><th style="text-align:right">จำนวน</th><th style="text-align:right">Median วัน</th></tr></thead><tbody>`;
+  sorted.forEach(([b,c])=>{ h+=`<tr><td style="font-size:.78rem">${b}</td><td style="text-align:right;color:var(--gold-light)">${c}</td><td style="text-align:right;color:#58d68d">${daysBy[b]?Math.round(median(daysBy[b])):'—'}</td></tr>`; });
+  document.getElementById('branchTable').innerHTML = h+'</tbody></table>';
 }
-
 function renderMain(data) {
-  const branches = [...new Set(data.map(d=>d.branch))].filter(Boolean).sort();
-  document.getElementById('filterBranch').innerHTML =
-    '<option value="">ทุกสาขา</option>' +
-    branches.map(b=>`<option value="${b}">${shortBranch(b)}</option>`).join('');
-
+  document.getElementById('filterBranch').innerHTML = '<option value="">ทุกสาขา</option>' + [...new Set(data.map(d=>d.branch))].filter(Boolean).sort().map(b=>`<option value="${b}">${shortBranch(b)}</option>`).join('');
   let h = '';
   data.forEach(d=>{
-    const rc = d.status==='วิกฤต'||d.status==='หมดวาระ' ? 'tr-danger' :
-               d.status==='เฝ้าระวัง' ? 'tr-warning' : '';
-    const pc = {วิกฤต:'pill-red',เฝ้าระวัง:'pill-yellow',ปกติ:'pill-green',
-                หมดวาระ:'pill-gray',เสนอพิจารณา:'pill-blue'}[d.status]||'pill-green';
-    const dTxt = d.days===null ? '—' :
-                 d.days < 0   ? `<span style="color:#888">${d.days}</span>` :
-                 `<strong>${d.days}</strong>`;
-    h += `<tr class="${rc}" data-branch="${d.branch}" data-status="${d.status}">
-      <td>${d.no}</td>
-      <td>${d.province}</td>
-      <td>${d.name}</td>
-      <td><small>${shortBranch(d.branch)}</small></td>
-      <td style="white-space:nowrap">${fmtDate(d.appoint)}</td>
-      <td style="white-space:nowrap">${fmtDate(d.expiry)}</td>
-      <td style="text-align:center">${dTxt}</td>
-      <td><span class="pill ${pc}">${d.status}</span></td>
-    </tr>`;
+    const pc = {วิกฤต:'pill-red',เฝ้าระวัง:'pill-yellow',ปกติ:'pill-green',หมดวาระ:'pill-gray',เสนอพิจารณา:'pill-blue'}[d.status]||'pill-green';
+    h += `<tr class="${d.status==='วิกฤต'||d.status==='หมดวาระ'?'tr-danger':d.status==='เฝ้าระวัง'?'tr-warning':''}" data-branch="${d.branch}" data-status="${d.status}"><td>${d.no}</td><td>${d.province}</td><td>${d.name}</td><td><small>${shortBranch(d.branch)}</small></td><td class="text-center">${fmtDate(d.appoint)}</td><td class="text-center">${fmtDate(d.expiry)}</td><td class="text-center">${d.days===null?'—':d.days<0?`<span style="color:#888">${d.days}</span>`:`<strong>${d.days}</strong>`}</td><td><span class="pill ${pc}">${d.status}</span></td></tr>`;
   });
   document.getElementById('mainTbody').innerHTML = h;
-
-  if (dtTable) { dtTable.destroy(); dtTable=null; }
-
+  if (dtTable) { dtTable.destroy(); }
   $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(f=>f._myFilter!==true);
-  const filterFn = function(settings, data, dataIndex) {
-    if (settings.nTable.id !== 'mainTable') return true;
-    const branch = document.getElementById('filterBranch').value;
-    const status = document.getElementById('filterStatus').value;
-    const tr = $(settings.aoData[dataIndex].nTr);
-    if (!tr.length) return true;
-    if (branch && tr.data('branch')!==branch) return false;
-    if (status && tr.data('status')!==status) return false;
-    return true;
+  const fFn = function(s, d, i) {
+    if(s.nTable.id!=='mainTable') return true;
+    const b=$('#filterBranch').val(), st=$('#filterStatus').val(), tr=$(s.aoData[i].nTr);
+    return (!b||tr.data('branch')===b) && (!st||tr.data('status')===st);
   };
-  filterFn._myFilter = true;
-  $.fn.dataTable.ext.search.push(filterFn);
-
-  dtTable = $('#mainTable').DataTable({
-    pageLength: 25,
-    lengthMenu: [10,25,50,100,231],
-    language:{
-      search:'ค้นหา:', lengthMenu:'แสดง _MENU_ รายการ',
-      info:'แสดง _START_–_END_ จาก _TOTAL_ รายการ',
-      infoEmpty:'ไม่พบข้อมูล', zeroRecords:'ไม่พบรายการที่ค้นหา',
-      paginate:{first:'«',last:'»',next:'›',previous:'‹'},
-    },
-    order:[[1,'asc']],
-    columnDefs:[{targets:[4,5,6,7],className:'dt-center'}],
-  });
+  fFn._myFilter = true; $.fn.dataTable.ext.search.push(fFn);
+  dtTable = $('#mainTable').DataTable({ pageLength: 25, language:{search:'ค้นหา:',lengthMenu:'_MENU_ รายการ',info:'_START_-_END_ จาก _TOTAL_',infoEmpty:'',zeroRecords:'ไม่พบข้อมูล',paginate:{first:'«',last:'»',next:'›',previous:'‹'}} });
 }
-
 function applyFilters() { if(dtTable) dtTable.draw(); }
 
 function processDataText(text) {
   try {
-    const rows = parseCSV(text);
-    allData    = parseRows(rows);
-    if (!allData.length) throw new Error('ไม่พบข้อมูล หรือไฟล์ไม่ถูกต้อง');
-
+    const rows = parseCSV(text); allData = parseRows(rows);
+    if (!allData.length) throw new Error('ไม่พบข้อมูล หรือไฟล์ผิดรูปแบบ');
     const dups = findDups(allData);
-
-    renderKPI(allData, dups);
-    renderAlerts(allData);
-    renderDups(dups);
-    renderChart(allData);
-    renderBranch(allData);
-    renderMain(allData);
-
-    document.getElementById('stateLoading').style.display = 'none';
-    document.getElementById('stateError').style.display   = 'none';
-    document.getElementById('stateDash').style.display    = 'block';
-
-    const now = new Date();
-    document.getElementById('lastUpdated').textContent =
-      `อัปเดต: ${now.toLocaleTimeString('th-TH')} · ${allData.length} รายการ`;
-
+    renderKPI(allData, dups); renderAlerts(allData); renderDups(dups); renderChart(allData); renderBranch(allData); renderMain(allData);
+    document.getElementById('stateLoading').style.display = 'none'; document.getElementById('stateError').style.display = 'none'; document.getElementById('stateDash').style.display = 'block';
+    document.getElementById('lastUpdated').textContent = `ดึงข้อมูลสำเร็จ: ${new Date().toLocaleTimeString('th-TH')}`;
   } catch(err) {
-    document.getElementById('stateLoading').style.display = 'none';
-    document.getElementById('stateError').style.display   = 'block';
-    document.getElementById('errMsg').textContent = err.message;
+    document.getElementById('stateLoading').style.display = 'none'; document.getElementById('stateError').style.display = 'block'; document.getElementById('errMsg').textContent = err.message;
   }
 }
 
-// ─────────────────────────────────────────
-// Load Data (Fetch or Upload)
-// ─────────────────────────────────────────
+// ฟังก์ชันหลักสำหรับดึงข้อมูล
 async function loadData() {
   document.getElementById('stateLoading').style.display = 'flex';
-  document.getElementById('stateDash').style.display   = 'none';
-  document.getElementById('stateError').style.display  = 'none';
-  document.getElementById('lastUpdated').textContent   = 'กำลังโหลด...';
+  document.getElementById('stateDash').style.display = 'none';
+  document.getElementById('stateError').style.display = 'none';
 
-  // ตรวจสอบว่ามีการอัปโหลดไฟล์มาด้วยตัวเองหรือไม่
-  const fileInput = document.getElementById('csvFileInput');
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    reader.onload = function(e) { processDataText(e.target.result); };
-    reader.onerror = function() {
-      document.getElementById('stateLoading').style.display = 'none';
-      document.getElementById('stateError').style.display   = 'block';
-      document.getElementById('errMsg').textContent = 'ไม่สามารถอ่านไฟล์ที่อัปโหลดได้';
-    };
-    reader.readAsText(file, 'UTF-8');
-    return;
-  }
+  let successText = null;
 
-  // หากไม่มีการอัปโหลดไฟล์ จะพยายามดึงข้อมูลจากลิงก์ Google Drive อัตโนมัติ
-  let text = null;
-  // ลองดึงจาก URL_EXP และ URL_PUB
-  for (const url of [URL_EXP, URL_PUB]) {
+  // วนลูปใช้ Proxy เพื่อพยายามดึงข้อมูลให้ทะลุ Block
+  for (const proxyUrl of PROXY_URLS) {
     try {
-      const r = await fetch(url, {cache:'no-store'});
-      if (r.ok) { 
-        const t = await r.text(); 
-        // ถ้าผลลัพธ์เป็นหน้าเว็บ (HTML) แสดงว่าดึงผิด หรือติดการเข้าสู่ระบบ
-        if(!t.includes('<!DOCTYPE html')) { 
-          text=t; 
-          break; 
-        } 
+      console.log('กำลังดึงข้อมูลผ่าน:', proxyUrl);
+      const res = await fetch(proxyUrl, { cache: 'no-store' });
+      if (res.ok) {
+        const text = await res.text();
+        // ตรวจสอบว่าได้เป็นไฟล์ CSV จริงๆ ไม่ใช่หน้าเว็บ HTML แจ้งเตือนสิทธิ์
+        if (text && !text.toLowerCase().includes('<html') && text.includes(',')) {
+          successText = text;
+          break; // ถ้าสำเร็จให้ออกจากการวนลูปทันที
+        }
       }
-    } catch(e) {}
+    } catch (e) { console.warn('Proxy ล้มเหลว:', e); }
   }
 
-  if (!text) {
+  if (successText) {
+    processDataText(successText);
+  } else {
     document.getElementById('stateLoading').style.display = 'none';
-    document.getElementById('stateError').style.display   = 'block';
-    document.getElementById('errMsg').innerHTML = 'การเชื่อมต่อถูกปฏิเสธ (CORS) หรือไฟล์ถูกตั้งค่าเป็นส่วนตัว';
-    return;
+    document.getElementById('stateError').style.display = 'block';
+    document.getElementById('errMsg').innerHTML = 'ไฟล์ถูกบล็อกไม่ให้ดึงข้อมูล (CORS / การตั้งค่าสิทธิ์)';
   }
-
-  processDataText(text);
 }
 
-document.getElementById('csvFileInput').addEventListener('change', loadData);
+// รองรับการอัปโหลดไฟล์ด้วยตนเองกรณีฉุกเฉิน
+document.getElementById('csvFileInput').addEventListener('change', function(e) {
+  if (e.target.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = function(evt) { processDataText(evt.target.result); };
+    reader.readAsText(e.target.files[0], 'UTF-8');
+  }
+});
 
-// ดึงข้อมูลอัตโนมัติเมื่อเปิดเว็บ
+// เริ่มดึงข้อมูลทันทีเมื่อเปิดหน้า
 loadData();
 </script>
 </body>
